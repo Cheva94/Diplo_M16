@@ -18,4 +18,5 @@
 
 ### **Estructura:**
 
+**0. General:** Información general sobre la mentoría junto al data statement.
 **1. AyVD:** Análisis y visualización de datos.

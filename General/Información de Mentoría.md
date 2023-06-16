@@ -26,7 +26,7 @@ Para ello, se brindará una metodología de trabajo que permita desarrollar un m
 ## Preguntas a responder
 Las principales preguntas que nos planteamos son:
 1. Con los datos disponibles ¿se puede predecir cuáles serán los mejores vendedores de la empresa?
-2. Con los datos disponibles, ¿ se puede validar el modelo de “vendedor ideal” propuesto por la empresa?
+2. Con los datos disponibles, ¿se puede validar el modelo de “vendedor ideal” propuesto por la empresa?
 3. ¿Qué modelo podría predecir el comportamiento de los vendedores cuyo comportamiento de ventas se desvían del comportamiento del vendedor modelo?
 4. ¿Se pueden identificar diferentes perfiles de vendedores?
 5. ¿Qué predicción de pago de comisiones se pueden obtener para el próximo periodo?
@@ -34,13 +34,10 @@ Las principales preguntas que nos planteamos son:
 ## Datos
 
 ### Origen de los datos
-Los datos fueron provistos y recopilados por el contador de la empresa. Los datos que identifican datos personas fueron anonimizados.
+Los datos fueron provistos y recopilados por el contador de la empresa. Los datos que identifican datos personales fueron anonimizados.
 
 ### Descripción de los datos
-En general, el set de datos contiene información sobre ventas, comisiones por ventas correspondientes a un periodo de 5 años. 
-Se identifican los vendedores, clasificados en vendedores mayoristas y minoristas 
-Los datos de las ventas se pueden desmenuzar por subrubros de productos.
-Se identifican también los vendedores que integran el grupo de “vendedores modelo”.
+En general, el set de datos contiene información sobre ventas y comisiones por ventas correspondientes a un periodo de 5 años. Se identifican los vendedores, clasificados en vendedores mayoristas y minoristas. Los datos de las ventas se pueden desmenuzar por subrubros de productos. Se identifican también los vendedores que integran el grupo de “vendedores modelo”.
 Se presenta un diccionario de datos, donde se incluyen las variables que integran el dataset y su descripción. https://github.com/git-lu/datos-kl-mentoria-2023/tree/main
 
 ## Hitos de la mentoría
