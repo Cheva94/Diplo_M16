@@ -2,7 +2,7 @@
 
 ## **Resolución de entregables de la Mentoría**
 
-### **Mentoría 16:**
+### **Mentoría 16**
 
 **Título**
 ¿Cómo identificar fuga de ventas? Inteligencia artificial aplicada al sector comercial.
