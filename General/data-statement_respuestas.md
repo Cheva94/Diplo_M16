@@ -35,8 +35,8 @@ El dataset provisto consta de 431506 registros con información sobre las ventas
 *   **PORCENTAJE_COMISION_EMPRESA**: comisión por las ventas en la plataforma (alícuota). Tipo: flotante. Cantidad de valores únicos: 89.
 *   **COMISION_EMPRESA**: comisión por las ventas en la plataforma (valor). Tipo: flotante. Cantidad de valores únicos: 244284.
 *   **CATEGORIA**: descripción del Código de Actividad Codiguero NAES Año 2018 y siguientes. Tipo: string. Cantidad de valores únicos: 5.
-*   **DESCRIPCION_CATEGORIA**: subrubro definido por la DGR (Dato Interno, no declarado por el contribuyente). Tipo: string. Cantidad de valores únicos: 245.
 *   **CATEGORIA (Ajustado)**: variable `CATEGORIA` limpia, *i.e.* se redujo el número de valores posibles. Tipo: string. Cantidad de valores únicos: 1 ("COMERCIO AL POR MAYOR Y AL POR MENOR; REPARACION DE VEHÍCULOS AUTOMOTORES Y MOTOCICLETAS").
+*   **DESCRIPCION_CATEGORIA**: subrubro definido por la DGR (Dato Interno, no declarado por el contribuyente). Tipo: string. Cantidad de valores únicos: 245.
 *   **SUB-CATEGORIA**: variable `DESCRIPCION_CATEGORIA` limpia, *i.e.* se redujo el número de valores posibles. Tipo: string. Cantidad de valores únicos: 21.
 *   **DESC_TRATAMIENTO_FISCAL**: indica qué tratamiento fiscal se le da a la operación, especialmente respecto a la alícuota a cobrarle. Tipo: string. Cantidad de valores únicos: 4.
 *   **TRATAMIENTO_FISCAL**: análogo a `DESC_TRATAMIENTO_FISCAL`, pero desglosado. Tipo: string. Cantidad de valores únicos: 17.
@@ -45,6 +45,8 @@ El dataset provisto consta de 431506 registros con información sobre las ventas
 *   **OMEGA**: identifica contribuyentes de interés fiscal especial. Tipo: entero. Cantidad de valores únicos: 1 (valor 1).
 
 En resumen, cada registro informa la suma total de las ventas efectuadas por cada uno de los depósitos de cada vendedor, para un mes y año dados. Por razones de sensibilidad de los datos y la confidencialidad necesaria, las variables que refieren a datos personales (`ID_VENDEDOR` y `NOMBRE`) fueron anonimizadas mediante hasheo.
+
+Todos los montos se asumen en pesos.
 
 ---
 

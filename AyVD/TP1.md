@@ -58,4 +58,4 @@ En este trabajo práctico, vamos a trabajar con un conjunto de datos de una seri
 
 **Notebook** que refleje el trabajo realizado en Python. Puede ser la notebook aquí presentada e intervenida por ustedes o bien generar una nueva.
 
-**Estructura del informe:** en formato pdf , markdown. El contenido del informe debe dar cuenta de una adecuada manipulación de las herramientas estadísticas para visualizar resultados de interés del estudiante en contextos de masividad. Incorporando elementos de Estadística descriptiva, Estadística inferencial y Visualización. El informe deberá mostrar la interpretación que surge del análisis realizado.
+**Estructura del informe:** en formato pdf o markdown. El contenido del informe debe dar cuenta de una adecuada manipulación de las herramientas estadísticas para visualizar resultados de interés del estudiante en contextos de masividad. Incorporando elementos de Estadística descriptiva, Estadística inferencial y Visualización. El informe deberá mostrar la interpretación que surge del análisis realizado.
