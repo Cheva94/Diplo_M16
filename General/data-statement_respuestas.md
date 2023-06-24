@@ -1,92 +1,59 @@
-## Data statements para datasets
-**Introducción** 
+# Diplomatura en ciencia de datos, aprendizaje automático y sus aplicaciones - Edición 2023 - FAMAF (UNC)
 
-Sabemos que los datos juegan un papel fundamental en el aprendizaje automático. Cada modelo de aprendizaje automático se entrena y evalúa utilizando datos. Las características de estos conjuntos de datos (en inglés, datasets) cambiarán completamente el comportamiento de un modelo. Es poco probable que un modelo funcione bien si su contexto de uso no coincide con sus datasets de entrenamiento o evaluación, o si estos datasets reflejan sesgos no deseados. 
+## Mentoría 16 - ¿Cómo identificar fuga de ventas? Inteligencia artificial aplicada al sector comercial.
 
-Los data statements para datasets son una metodología que permiten caracterizar los datos y hacer explícitos posibles riesgos de su uso. Tienen el potencial de aumentar la transparencia y la responsabilidad de los productos basados en esos datos. 
-Si tenemos un data statement nos podemos preguntar si un sistema entrenado en ese dataset es o no apropiado para cómo se planea utilizar el sistema. Un data statement ayuda también  a mejorar la reproducibilidad de un modelo al documentar cómo difieren distintas versiones del mismo dataset.
+**Integrantes:**
+- Canalis, Patricio.
+- Chevallier-Boutell, Ignacio José.
+- Villarroel Torrez, Daniel.
 
-Están destinados a abordar las necesidades de dos grupos de partes interesadas clave: creadores de datasets y consumidores de datasets. Para los creadores de datasets, el objetivo principal es fomentar una reflexión cuidadosa sobre el proceso de creación, distribución y mantenimiento de un conjunto de datos, incluidas las suposiciones subyacentes, los riesgos o daños potenciales y las implicaciones del uso. Para los consumidores de datasets, el objetivo principal es garantizar que tengan la información que necesitan para tomar decisiones informadas sobre el uso de un conjunto de datos. 
+**Mentores:**
+- Gonzalez, Lucía
+- Lahoz, Nahuel
 
-La forma de elaborar un data statement consiste en entrevistar al creador o responsable del dataset y realizar la serie de preguntas que se enumeran en este documento. En la siguiente sección se detallan los pasos a seguir. 
+---
 
-## 1. Motivación para la creación del dataset
+## Data statement
 
-Las preguntas de esta sección están destinadas principalmente a alentar a los creadores de datasets a articular claramente sus razones para crear el conjunto de datos y promover la transparencia sobre los intereses de financiación. 
+> Motivación
 
-1.1 ¿Con qué propósito se creó el conjunto de datos? ¿Se tenía una tarea específica en mente? ¿Conoce otros datasets parecidos, y, en ese caso, cuáles son las diferencias? Proporcione una descripción. 
-COMPLETAR
+El cliente es una empresa que provee una plataforma de compra-venta online de cierto tipo de productos: los vendedores que forman parte, participan ofertando sus productos en dicha plataforma. Una de las obligaciones que tienen los vendedores es que, si un comprador inicia el contacto a través de la plataforma, el proceso debe progresar exclusivamente dentro de la misma. Aquellos vendedores que cumplen esta norma en la totalidad de sus transacciones comerciales a través de la plataforma se conocen como ***vendedores modelo***. Por algún motivo, el cliente sospecha que hay fuga de ventas: existen vendedores que concretan ventas por fuera de la plataforma, a pesar de haber iniciado el contacto dentro de ésta. En este sentido, nos contrata para detectar y predecir quiénes son estos vendedores que se alejan del comportamiento ideal, proveyéndonos este dataset recopilado por el contador del cliente.
 
-1.2 ¿Quién creó el conjunto de datos (por ejemplo, qué equipo, grupo de investigación) y en nombre de qué entidad (por ejemplo, empresa, institución, organización)?
-COMPLETAR
+---
 
-1.3  ¿Quién financió la creación del conjunto de datos? 
-COMPLETAR
+> Composición
 
-## 2. Composición del dataset 
-Estas preguntas están destinadas a proporcionar a los consumidores del conjunto de datos la información que necesitan para tomar decisiones informadas sobre el uso del conjunto de datos para tareas específicas. 
+El dataset provisto consta de 431506 registros con información sobre las ventas realizadas por los vendedores dentro de la plataforma. Dicha información viene caracterizada por 19 variables:
+*   **ID_VENDEDOR**: identificación del vendedor, asociada a su CUIT. Tipo: string. Cantidad de valores únicos: 3209.
+*   **NOMBRE**: identificación del vendedor, asociada al nombre *real* (persona física o jurídica) del mismo. Tipo: string. Cantidad de valores únicos: 3199.
+*   **MODELO**: código de identificación de vendedores considerados modelo por parte del cliente. Tipo: entero. Cantidad de valores únicos: 2 (0 categoriza los que no son vendedores modelo, mientras que 1 los posiciona como tales).
+*   **DEPOSITO**: identificación del depósito de stock desde el cual se efectúan las ventas. Tipo: entero. Cantidad de valores únicos: 241.
+*   **INSCRIPCION**: código de inscripción provisto por la DGR. Tipo: entero. Cantidad de valores únicos: 3345.
+*   **AÑO**: año de imputación del registro. Tipo: entero. Cantidad de valores únicos: 4 (desde 2019 hasta 2022).
+*   **MES**: mes de imputación del registro. Tipo: entero. Cantidad de valores únicos: 12 (desde Enero hasta Diciembre).
+*   **TOTAL_VENTAS**: monto total de ventas (base imponible). Tipo: flotante. Cantidad de valores únicos: 248974.
+*   **PORCENTAJE_COMISION_EMPRESA**: comisión por las ventas en la plataforma (alícuota). Tipo: flotante. Cantidad de valores únicos: 89.
+*   **COMISION_EMPRESA**: comisión por las ventas en la plataforma (valor). Tipo: flotante. Cantidad de valores únicos: 244284.
+*   **CATEGORIA**: descripción del Código de Actividad Codiguero NAES Año 2018 y siguientes. Tipo: string. Cantidad de valores únicos: 5.
+*   **DESCRIPCION_CATEGORIA**: subrubro definido por la DGR (Dato Interno, no declarado por el contribuyente). Tipo: string. Cantidad de valores únicos: 245.
+*   **CATEGORIA (Ajustado)**: variable `CATEGORIA` limpia, *i.e.* se redujo el número de valores posibles. Tipo: string. Cantidad de valores únicos: 1 ("COMERCIO AL POR MAYOR Y AL POR MENOR; REPARACION DE VEHÍCULOS AUTOMOTORES Y MOTOCICLETAS").
+*   **SUB-CATEGORIA**: variable `DESCRIPCION_CATEGORIA` limpia, *i.e.* se redujo el número de valores posibles. Tipo: string. Cantidad de valores únicos: 21.
+*   **DESC_TRATAMIENTO_FISCAL**: indica qué tratamiento fiscal se le da a la operación, especialmente respecto a la alícuota a cobrarle. Tipo: string. Cantidad de valores únicos: 4.
+*   **TRATAMIENTO_FISCAL**: análogo a `DESC_TRATAMIENTO_FISCAL`, pero desglosado. Tipo: string. Cantidad de valores únicos: 17.
+*   **TRATAMIENTO_DIFERNCIAL**: indica el artículo de alguna reglamentación aplicado para dar tratamiento fiscal especial. Tipo: string. Cantidad de valores únicos: 11.
+*   **CM04**: identifica operaciones que se ejecutan bajo un Convenio Multilateral (CM). Tipo: string. Cantidad de valores únicos: 1 ("Sí").
+*   **OMEGA**: identifica contribuyentes de interés fiscal especial. Tipo: entero. Cantidad de valores únicos: 1 (valor 1).
 
-2.1 ¿Qué representan las instancias que componen el conjunto de datos (por ejemplo, documentos, fotos, personas, países)? ¿Hay varios tipos de instancias (por ejemplo, películas, usuarios y calificaciones; personas e interacciones entre ellas; nodos y conexiones)? Proporcione una descripción.
-COMPLETAR
- 
-2.2 ¿Cuántas instancias hay en total (y de cada tipo, si corresponde)?  
-COMPLETAR
+En resumen, cada registro informa la suma total de las ventas efectuadas por cada uno de los depósitos de cada vendedor, para un mes y año dados. Por razones de sensibilidad de los datos y la confidencialidad necesaria, las variables que refieren a datos personales (`ID_VENDEDOR` y `NOMBRE`) fueron anonimizadas mediante hasheo.
 
-2.3 ¿De qué datos consta cada instancia? ¿Datos "sin procesar" (por ejemplo, texto o imágenes sin procesar) o características? En cualquier caso, proporcione una descripción y algunos ejemplos.
-COMPLETAR
- 
-2.4 ¿Hay una etiqueta o anotación de supervisión asociada con cada instancia? Si es así, proporcione una descripción. 
-COMPLETAR
+---
 
-2.5 ¿Cree que hay algún aspecto de los datos que no ha sido representado y que podría llegar a resultar relevante para alguna aplicación o por sus efectos en algún segmento de la población (p. ej., falta información de género)? De ser así, proporcione una descripción. 
-COMPLETAR
+> Recopilación y uso
 
-2.6 ¿El conjunto de datos contiene datos que podrían considerarse confidenciales (por ejemplo, datos que están protegidos por privilegios legales o por la confidencialidad del médico-paciente, datos que incluyen el contenido de las comunicaciones no públicas de las personas)? Si es así, proporcione una descripción. 
-COMPLETAR
+Los datos disponibles contienen información sobre las ventas realizadas entre enero de 2019 y junio de 2022. Recomendamos tener en cuenta factores como inflación y la pandemia de COVID-19, entre otros. Asimismo, conviene incorporar conocimientos del ámbito de las series temporales: aunque no se hagan modelos temporales, los datos están intrínsecamente organizados de alguna manera particular a lo largo del tiempo.
 
-## 3. Recopilación del dataset
-Estas preguntas están destinadas a identificar características de la recopilación del dataset para advertir a consumidores del conjunto de datos sobre posibles sesgos emergentes debido a decisiones de recolección.  
+Los vendedores clasificados como **modelo** por parte del cliente, son un grupo de vendedores preseleccionados y deliberadamente monitoreados: los vendedores eran concientes de que estaban siendo monitoreados. Observamos entonces que su honestidad puede haber sido forzada. Además, los parámetros utilizados por el cliente para esta clasificación se desconocen.
 
-3.1 ¿Qué mecanismos se utilizaron para recopilar los datos, elegir la muestra y curar los datos (por ejemplo, aparatos o sensores de hardware, curación humana manual o automática, programa de software)? Esta pregunta es particularmente importante para datasets que son demasiado grandes para ser inspeccionados a mano. Explicar la racionalidad de la muestra puede ayudar a los usuarios de datasets a entender a qué tipos de usos el dataset puede generalizar bien o mal. 
-COMPLETAR
+El dataset provisto resulta en realidad ser un filtro de un dataset más grande: se filtraron los datos, reteniendo aquellos donde `OMEGA` era igual a 1. Aconsejamos tener esto presente al momento de aplicar los modelos resultantes en producción.
 
-3.2 ¿Quiénes participaron en el proceso de recopilación de datos (p. Ej., Estudiantes, trabajadores digitales, contratistas) y cómo se les compensó (p. Ej., ¿Cuánto se les pagó a los trabajadores)? 
-COMPLETAR
-
-3.3 ¿Durante qué período de tiempo se recopilaron los datos? 
-COMPLETAR
-
-3.4 ¿El conjunto de datos se relaciona con las personas? De lo contrario, puede omitir las preguntas de la sección 4. 
-COMPLETAR
-
-## 4. Datos de personas
-4.1 ¿El conjunto de datos incluye datos demográficos (por ejemplo, por edad, sexo)? De ser así, enumere qué datos demográficos se incluyen.
-
-4.2 ¿Es posible identificar individuos (es decir, una o más personas físicas), ya sea directa o indirectamente (es decir, en combinación con otros datos) del conjunto de datos? Si es así, describa cómo. 
-
-4.3 ¿El conjunto de datos contiene datos que podrían considerarse sensibles de alguna manera (por ejemplo, datos que revelan orígenes raciales o étnicos, orientaciones sexuales, creencias religiosas, etc.)?
-
-4.4 ¿Recopiló los datos de las personas en cuestión directamente o los obtuvo a través de terceros u otras fuentes (por ejemplo, sitios web)? 
-
-4.5 ¿Se notificó a las personas en cuestión sobre la recopilación de datos? Si es así, describa cómo se envió la notificación. 
-
-## 5. Usos 
-Estas preguntas están destinadas a alentar a los usuarios del dataset a reflexionar sobre las tareas para las que el dataset debe y no debe usarse. Al resaltar explícitamente estas tareas, los consumidores de datasets pueden tomar decisiones mejor informadas, previendo riesgos o daños potenciales. 
-
-5.1 ¿Para qué tareas creen que se puede usar este conjunto de datos?¿Ya se ha utilizado el conjunto de datos para alguna tarea? Si es así, proporcione una descripción. 
-COMPLETAR
-
-5.2 ¿Existe un repositorio que se vincule a alguno o todos los artículos o sistemas que utilizan el conjunto de datos? Si es así, proporcione un enlace u otro punto de acceso. 
-COMPLETAR
-
-5.3 ¿Para qué (otras) tareas se podría utilizar el conjunto de datos? 
-COMPLETAR
-
-5.4 ¿Hay algo sobre la composición del conjunto de datos o la forma en que se recopiló y preprocesó / limpió / etiquetó que pueda afectar los usos futuros? Por ejemplo, ¿hay algo que un futuro usuario pueda necesitar saber para evitar usos que podrían resultar en un trato injusto de individuos o grupos (por ejemplo, estereotipos, problemas de calidad del servicio) u otros daños indeseables (por ejemplo, daños financieros, riesgos legales)? Si es así, proporcione una descripción. 
-COMPLETAR
-
-5.5 ¿Hay tareas para las que no se debería utilizar el conjunto de datos? Si es así, proporcione una descripción. 
-COMPLETAR
-
-5.6 ¿Algún otro comentario?
-
+Las ventas registradas son tanto mayoristas como minoristas, lo cual repercute diferente en las comisiones y demás cuestiones asociadas a la recaudación de fondos. Advertimos considerar esto a la hora de ponderar quiénes son vendedores modelo y quiénes realizan fugas.
