@@ -60,7 +60,7 @@ Considerando esta información en conjunto con las definiciones de las variables
     - **Antes:** cada registro informa la suma total de las ventas efectuadas por cada uno de los depósitos de cada vendedor, para un mes y año dados.
     - **Ahora:** cada registro informa la suma total de las ventas efectuadas por cada vendedor en alguno de los depósitos donde tiene stock de sus productos, para un mes y año dados.
 * Considerando la definición de los registros, el hecho de que `TOTAL_VENTAS` sea igual a $0 implica que dicho vendedor no efectuó ventas a través de la plataforma del cliente que involucraran ese depósito particular, en ese mes y ese año. Una observación análoga se puede hacer para cuando `COMISION_EMPRESA` es igual a $0.
-* La cantidad de valores únicos en `DESCRIPCION_CATEGORIA` es similar al de la variable `DEPOSITO`: la primera tiene 4 valores únicos más. Además, la distribución de contribuciones porcentuales son simialres en ambas. Retomando la idea de que los depósitos agrupan vendedores según algún criterio, quizás ese criterio venga de la mano de la variable `DESCRIPCION_CATEGORIA`. Sin embargo, esta variable es transforamda en `SUB-CATEGORIA`, donde tiene menos valores únicos. En caso de existir tal relación entre `DESCRIPCION_CATEGORIA` y `DEPOSITO`, ¿se sigue apreciando al pasara a `SUB-CATEGORIA`?
+* La cantidad de valores únicos en `DESCRIPCION_CATEGORIA` es similar al de la variable `DEPOSITO`: la primera tiene 4 valores únicos más. Además, la distribución de contribuciones porcentuales son similares en ambas. Retomando la idea de que los depósitos agrupan vendedores según algún criterio, quizás ese criterio venga de la mano de la variable `DESCRIPCION_CATEGORIA`. Sin embargo, esta variable es transforamda en `SUB-CATEGORIA`, donde tiene menos valores únicos. En caso de existir tal relación entre `DESCRIPCION_CATEGORIA` y `DEPOSITO`, se asume que es heredada a `SUB-CATEGORIA`.
 * Al mirar con detenimiento los valores únicos de `TRATAMIENTO_FISCAL`, notamos que hay que unificar categorías, como es el caso de 0 y 0.0, por ejemplo. Asimismo se nos presenta la siguiente duda: ¿son todos los valores únicos realmente categorías diferentes entre sí o hay valores diferentes que en realidad reflejan la misma categoría subyacente? Por ejemplo: un vendedor que haya colocado el "1" como tratamiento fiscal, tiene en realidad el mismo tratamiento fiscal que aquel que haya colocado "Especial 1" y esto, a su vez, sea lo mismo que haber colocado "Alícuota agravada". Esta idea se refuerza aún más si pensamos que esta variable es en realidad un desglose de la variable `DESC_TRATAMIENTO_FISCAL`, la cual contiene solamente 4 valores únicos.
 * Tanto la variable `TRATAMIENTO_FISCAL` como la variable `DESC_TRATAMIENTO_FISCAL` presentan valores faltantes: faltan 27968 y 313665 valores respectivamente. El gráfico de matriz generado por la librería `missingno` muestra los valores ordenados por `ID_VENDEDOR`. Podemos ver que siempre que falta un dato en `TRATAMIENTO_FISCAL`, también falta en `DESC_TRATAMIENTO_FISCAL`, pero la recíproca no es cierta: cuando falta un dato en `DESC_TRATAMIENTO_FISCAL`, en la mayoría de los casos sí está presente el dato en `TRATAMIENTO_FISCAL`. Por otro lado, vemos que hay ocasiones donde falta el valor en `TRATAMIENTO_FISCAL`, pero aparece un valor en `TRATAMIENTO_DIFERNCIAL`. En el sentido opuesto, no hay una relación muy clara.
 
@@ -80,6 +80,39 @@ Considerando esta información en conjunto con las definiciones de las variables
 
 Concluimos esta sección analizando por qué pandas nos da el DtypeWarning con las variables `TRATAMIENTO_FISCAL`, `DESC_TRATAMIENTO_FISCAL` y `CM04`. Aunque las 3 variables poseen valores faltantes, en los 3 casos vemos que toman valores del tipo int64. Desconocemos entonces el origen de este aviso.
 
-> Primer descarte de variables
+> Descarte de variables
 
-Esto nos lleva a que `NOMBRE` es candidata a ser descartada.
+En base a lo visto hasta acá, se podría prescindir de:
+* `NOMBRE` ya que tiene la misma información que `ID_VENDEDOR`, pero puede tener problemas de degeneración.
+* `CATEGORIA` ya que fue reemplazada por `CATEGORIA (Ajustado)`.
+* `DESCRIPCION_CATEGORIA` ya que fue reemplazada por `SUB-CATEGORIA`,
+* `CATEGORIA (Ajustado)` y `OMEGA` ya que presentan un único valor posible, no aportando información estadística.
+
+El dataset resultante (denominado `ventas_clean` en la notebook) debe usarse entonces teniendo en cuenta el siguiente disclaimer: *Todos los registros en este dataset fueron filtrados de un dataset mayor según la categoría "COMERCIO AL POR MAYOR Y AL POR MENOR; REPARACION DE VEHÍCULOS AUTOMOTORES Y MOTOCICLETAS" y $Omega = 1$*.
+
+> Simplificación de valores
+
+Existen variables cuyos valores está expresados de manera tal que complejizan el análisis, complicando tanto la manipulación como la lectura e interpretación de tablas y gráficos. Pretendemos eliminar esta capa de complejidad innecesaria, transformando las variables de alguna manera. Las variables que quermos transformar son: `ID_VENDEDOR`, `INSCRIPCION`, `DEPOSITO`, ``, ``, ``, ``, ``, ``,
+
+
+> Cosas en el tintero
+
+* Ver qué `ID_VENDEDOR` se agrupan en qué `DEPOSITO`.
+* Ver tratamiento que se hace con $0 en `TOTAL_VENTAS` y `COMISION_EMPRESA`.
+* `TRATAMIENTO_FISCAL` hay que unificar categorías
+* `TRATAMIENTO_FISCAL` vs `DESC_TRATAMIENTO_FISCAL`
+* `TRATAMIENTO_DIFERNCIAL` simplificar nombres de artículos
+* Imputar `TRATAMIENTO_DIFERNCIAL` y `CM04`
+
+* Descatar `NOMBRE` y quedarse con `ID_VENDEDOR`.
+* Descartar `OMEGA`
+* ¿Tiene sentido que la DGR haya provisto 2 códigos de `INSCRIPCION` para un mismo `ID_VENDEDOR`?
+
+* Simplificación de variables
+
+> Cosas que aún no se ubicaron pero no hay que olvidar
+
+* Esto nos lleva a que `NOMBRE` es candidata a ser descartada.
+* valores negativos son crédito o error
+* Simplificar/unificar valores
+* ver meet seguimiento
