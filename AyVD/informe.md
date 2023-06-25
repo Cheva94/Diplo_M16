@@ -51,7 +51,9 @@ Se determinó cuántos valores únicos hay presentes en cada una de las 19 varia
 18. **COMISION_EMPRESA:** tiene 244284 valores diferentes. El valor mayoritario (comisión de $0 para el cliente) contribuye en un 42.52% de los registros y los 10 primeros en conjunto contribuyen al 42.56%.
 19. **MODELO:** tiene 2 valores diferentes: 0 y 1. Sólo el 0.32% de los registros (valor 1) es considerado **vendedor modelo** por parte del cliente.
 
-Considerando esta información en conjunto con las definiciones de las variables, podemos hacer las siguientes observaciones:
+> Observaciones que podemos hacer a partir de lo visto
+
+Considerando lo dicho hasta el momento, podemos hacer las siguientes observaciones:
 * Si bien la distribución de porcentajes son similares entre `NOMBRE` y `ID_VENDEDOR`, los hashs son diferentes y, además, hay 10 nombres únicos menos. Considerando ésto más el hecho de que hay 649 registros sin valor en la variable `NOMBRE`, podemos pensar que hay 2 situaciones que pueden estar ocurriendo en simultáneo:
     1. Dos vendedores (CUITs) diferentes usaron el mismo nombre (persona física o jurídica) para su negocio.
     2. Hay vendedores (CUITs) que no completaron el campo con el nombre (persona física o jurídica).
