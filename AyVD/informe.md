@@ -134,25 +134,10 @@ Los diccionarios usados en los 2 últimos puntos se pueden ver en la notebook. E
 # Notebook `resolucion02`: 
 
 ---
-
-> Cosas en el tintero
+# Cosas en el tintero
 
 * Ver qué `ID_VENDEDOR` se agrupan en qué `DEPOSITO`.
 * Ver tratamiento que se hace con $0 en `TOTAL_VENTAS` y `COMISION_EMPRESA`.
-* `TRATAMIENTO_FISCAL` hay que unificar categorías
 * `TRATAMIENTO_FISCAL` vs `DESC_TRATAMIENTO_FISCAL`
-* `TRATAMIENTO_DIFERNCIAL` simplificar nombres de artículos
-* Imputar `TRATAMIENTO_DIFERNCIAL` y `CM04`
-
-* Descatar `NOMBRE` y quedarse con `ID_VENDEDOR`.
-* Descartar `OMEGA`
 * ¿Tiene sentido que la DGR haya provisto 2 códigos de `INSCRIPCION` para un mismo `ID_VENDEDOR`?
-
-* Simplificación de variables
-
-> Cosas que aún no se ubicaron pero no hay que olvidar
-
-* Esto nos lleva a que `NOMBRE` es candidata a ser descartada.
-* valores negativos son crédito o error
-* Simplificar/unificar valores
-* ver meet seguimiento
+* Valores negativos en ventas y comisiones ¿crédito o error?
