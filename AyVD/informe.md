@@ -124,7 +124,9 @@ Existen variables cuyos valores está expresados de manera tal que complejizan e
 * Variables con valores que parecen diferentes, pero en realidad son el mismo escrito en formatos diferentes: `Trat_Fisc`.
 * Variables cuyos valores pueden escribirse de forma más sencilla: `Trat_Fisc`, `Trat_Fisc_Agg`, `Trat_Dif` y `Categoria`.
 
-Los diccionarios usados en los 2 últimos puntos se pueden ver en la notebook.
+Los diccionarios usados en los 2 últimos puntos se pueden ver en la notebook. En la siguiente figura se puede apreciar un ejemplo (y justificación) de estos cambios.
+
+![mapeo_ej](mapeo_ej.png)
 
 ***Nota:*** el dataset resultante de todas estas modificaciones asignado en el DataFrame `ven_cln_map` está hosteado [aquí](https://www.dropbox.com/scl/fi/684jriu2g52lqyv45z53s/ven_cln_map.csv?dl=1&rlkey=hr7lcqja46a9fj5bdx7ofdgah). Cabe destacar que el dataset crudo pesaba 220 MB y este nuevo dataset pesa 31 MB.
 
