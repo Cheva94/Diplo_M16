@@ -14,10 +14,13 @@
 - Lahoz, Nahuel
 
 ---
+# Notebook `resolucion01`: exploración inicial
 
 > Tamaño del dataset y significado de los registros
 
 El dataset provisto (denominado `ventas` en la notebook) consta de 431506 registros con información sobre las ventas realizadas por los vendedores dentro de la plataforma de ventas online del cliente. Dicha información viene caracterizada por 19 variables. La definición de cada una de estas variables se tiene en el data statement. En resumen, cada registro informa la suma total de las ventas efectuadas por cada uno de los depósitos de cada vendedor, para un mes y año dados. Por razones de sensibilidad de los datos y la confidencialidad necesaria, las variables que refieren a datos personales (`ID_VENDEDOR` y `NOMBRE`) fueron anonimizadas mediante hasheo.
+
+***Nota:*** el dataset crudo que se levanta en el DataFrame `ventas` está hosteado [aquí](https://www.dropbox.com/scl/fi/iaagjtks3apflrywvomuv/muestra_diplodatos_ventas_2023.csv?dl=1&rlkey=zfsh0bnwbomd4g56bcjysytiy).
 
 > Datos faltantes
 
@@ -51,7 +54,7 @@ Se determinó cuántos valores únicos hay presentes en cada una de las 19 varia
 18. **COMISION_EMPRESA:** tiene 244284 valores diferentes. El valor mayoritario (comisión de $0 para el cliente) contribuye en un 42.52% de los registros y los 10 primeros en conjunto contribuyen al 42.56%.
 19. **MODELO:** tiene 2 valores diferentes: 0 y 1. Sólo el 0.32% de los registros (valor 1) es considerado **vendedor modelo** por parte del cliente.
 
-> Observaciones que podemos hacer a partir de lo visto
+> Observaciones hasta ahora
 
 Considerando lo dicho hasta el momento, podemos hacer las siguientes observaciones:
 * Si bien la distribución de porcentajes son similares entre `NOMBRE` y `ID_VENDEDOR`, los hashs son diferentes y, además, hay 10 nombres únicos menos. Considerando ésto más el hecho de que hay 649 registros sin valor en la variable `NOMBRE`, podemos pensar que hay 2 situaciones que pueden estar ocurriendo en simultáneo:
@@ -78,7 +81,7 @@ Considerando lo dicho hasta el momento, podemos hacer las siguientes observacion
 * La falta de información en las variables `CM04` y `TRATAMIENTO_DIFERNCIAL` es en realidad información, ya que se trata de los complementos:
     * En el caso de `CM04` los datos faltantes corresponden a que esas operaciones no forman parte de convenios multilaterales.
     * En el caso de `TRATAMIENTO_DIFERNCIAL` los datos faltantes corresponden a que esas operaciones no reciben un tratamiento fiscal especial.
-* Finalmente, como se indica en el data statement, la variable `OMEGA` tiene un único valor ya que el dataset provisto es en realidad lo que surge de filtrar un dataset más grande bajo el filtro de $OMEGA = 1$.
+* Finalmente, como se indica en el data statement, la variable `OMEGA` tiene un único valor ya que el dataset provisto es en realidad lo que surge de filtrar un dataset más grande bajo el filtro de `OMEGA` igual a 1.
 
 Concluimos esta sección analizando por qué pandas nos da el DtypeWarning con las variables `TRATAMIENTO_FISCAL`, `DESC_TRATAMIENTO_FISCAL` y `CM04`. Aunque las 3 variables poseen valores faltantes, en los 3 casos vemos que toman valores del tipo int64. Desconocemos entonces el origen de este aviso.
 
@@ -90,11 +93,11 @@ En base a lo visto hasta acá, se podría prescindir de:
 * `DESCRIPCION_CATEGORIA` ya que fue reemplazada por `SUB-CATEGORIA`,
 * `CATEGORIA (Ajustado)` y `OMEGA` ya que presentan un único valor posible, no aportando información estadística.
 
-El dataset resultante (denominado `ventas_clean` en la notebook) consta entonces de los 431506 registros, pero ahora con 14 variables. El mismo debe usarse entonces teniendo en cuenta el siguiente disclaimer: *Todos los registros en este dataset fueron filtrados de un dataset mayor según la categoría "COMERCIO AL POR MAYOR Y AL POR MENOR; REPARACION DE VEHÍCULOS AUTOMOTORES Y MOTOCICLETAS" y Omega = 1*.
+El dataset resultante (denominado `ventas_clean` en la notebook) consta entonces de los 431506 registros, pero ahora con 14 variables. El mismo debe usarse entonces teniendo en cuenta el siguiente disclaimer: <span style="color:red"> *Todos los registros en este dataset fueron filtrados de un dataset mayor según la categoría "COMERCIO AL POR MAYOR Y AL POR MENOR; REPARACION DE VEHÍCULOS AUTOMOTORES Y MOTOCICLETAS" y Omega = 1*. </span>
 
 > Imputación de valores faltantes
 
-Se imputaron en `ventas_clean` los valores faltantes en las variables `CM04` y `TRATAMIENTO_DIFERNCIAL` completando con el valor "No". De este modo, las únicas variables que aún tienen valores faltantes son `DESC_TRATAMIENTO_FISCAL` y `TRATAMIENTO_FISCAL`: siguen manteniendo una correlación de nuldiad de +0.2. Por su parte, la correlación de nuldiad entre `TRATAMIENTO_FISCAL` y `TRATAMIENTO_DIFERNCIAL` desaparece.
+Se imputaron en `ventas_clean` los valores faltantes en las variables `CM04` y `TRATAMIENTO_DIFERNCIAL` completando con el valor "No". De este modo, las únicas variables que aún tienen valores faltantes son `DESC_TRATAMIENTO_FISCAL` y `TRATAMIENTO_FISCAL`: siguen manteniendo una correlación de nuldiad de +0.2. Por su parte, la correlación de nulidad entre `TRATAMIENTO_FISCAL` y `TRATAMIENTO_DIFERNCIAL` desaparece.
 
 > Simplificación de variables
 
@@ -121,7 +124,12 @@ Existen variables cuyos valores está expresados de manera tal que complejizan e
 * Variables con valores que parecen diferentes, pero en realidad son el mismo escrito en formatos diferentes: `Trat_Fisc`.
 * Variables cuyos valores pueden escribirse de forma más sencilla: `Trat_Fisc`, `Trat_Fisc_Agg`, `Trat_Dif` y `Categoria`.
 
-# Falta los diccionarios
+Los diccionarios usados en los 2 últimos puntos se pueden ver en la notebook.
+
+***Nota:*** el dataset resultante de todas estas modificaciones asignado en el DataFrame `ven_cln_map` está hosteado [aquí](https://www.dropbox.com/scl/fi/684jriu2g52lqyv45z53s/ven_cln_map.csv?dl=1&rlkey=hr7lcqja46a9fj5bdx7ofdgah). Cabe destacar que el dataset crudo pesaba 220 MB y este nuevo dataset pesa 31 MB.
+
+---
+# Notebook `resolucion02`: 
 
 ---
 
