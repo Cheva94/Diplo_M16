@@ -164,7 +164,7 @@ Al analizar la asimetría (skewness) y la Kurtosis sobre estas variables decimos
 
 Los pairplot de antes se repitieron, pero esta vez utilizando las categorías `Categoria`, `Trat_Fisc_Agg`, `Trat_Fisc`, `Trat_Dif`, `CM` y `Modelo` para etiquetarlos. Analizando primero los datos de ventas nulas, se tiene que prácticamente todos los puntos tienen un tratamiento fiscal agregado normal y no tienen tratamiento diferencial ni forman parte del convenio multilateral. Además prácticamente todos los registros pertenecen a vendedores que no son modelo.
 
-Considerando ahora las ventas no nulas, podemos decir que prácticamente todos los puntos tienen un tratamiento fiscal agregado normal, no son vendedores modelo y no tienen tratamiento diferencial. Se destaca que tanto las alícuotas como las proyecciones de las rectas se logran diferenciar según la `Categoria` (ver próxima figura).
+Considerando ahora las ventas no nulas, podemos decir que prácticamente todos los puntos tienen un tratamiento fiscal agregado normal, no son vendedores modelo y no tienen tratamiento diferencial. Se destaca que tanto las alícuotas como las proyecciones de las rectas se logran diferenciar según la `Categoria` (ver próxima figura). De todas maneras, un análisis más detallado (ver notebook) idica que esta relación no es tan inmediata.
 ![hueCat](Figuras/pairplot_varnum_hueCat.png)
 
 Otro dato no menor es que **todos** los registros con ventas no nulas están asociadas a vendedores que no forman parte del convenio multilateral o, en otros términos, todos los registros que sí forman parte del convenio multilateral tienen ventas nulas. 
@@ -185,6 +185,20 @@ En todos los casos se ha descartado la columna `CM`, por lo que el disclaimer de
 
 > Análisis de la relación entre variables numéricas
 
+Queremos estudiar un poco más la relación lineal antes vista entre estas 3 variables. Proponemos que la función que las relaciona es
+    $$\text{Comision} = \text{Alicuota} \times \text{Ventas}$$
+
+La fórmula se cumple en la totalidad de registros con ventas nulas, mientras que en el caso de ventas no nulas, sólo se cumple de manera exacta en el 3.97% de los casos. En el 96.03%, la relación sobreestima el valor de la `Comision` en el 81.92% de los casos, mientras que la subestima en el 14.11% restante. A pesar de las diferencias entre el valor real y el predicho, en la siguiente figura se pueden apreciar claramente 2 pendientes: una muy grande y otra bastante más pequeña. Esas dos rectas serían las que describen mejor la tendencia de los puntos y, por lo tanto, explicarían la relación entre las 3 variables de interés:
+* **Pendiente pequeña:** el 33.03% de los registros responden a la ecuación antes planteada más un pequeño offset.
+    $$\text{Comision calculada} = \text{Comision real} + \$1.59 = \text{Alicuota} \times \text{Ventas}$$
+    $$\Rightarrow \text{Comision real} = \text{Alicuota} \times \text{Ventas} - \$1.59$$
+* **Pendiente grande:** el 66.97% de los registros responde a una ecuación diferente.
+    $$\text{Comision calculada} = 100 * \text{Comision real} + \$1365 = \text{Alicuota} \times \text{Ventas}$$
+    $$\Rightarrow \text{Comision Real} = \frac{\text{Alicuota} \times \text{Ventas} - \$1365}{100} = 0.01 \times \text{Alicuota} \times \text{Ventas} - \$13.65 $$
+
+![hueCat](Figuras/comision_calv-real.png)
+
+En la notebook se puede ver además que todos los vendedores modelo caen dentro de la recta de menor pendiente, la cual establece prácticamente una relación de proporcionalidad directa entre las ventas y la comisión de la empresa. Por su parte, los que no están clasificados como modelo caen sobre ambas rectas. ¿Podría ser este un camino para detectar la fuga?
 
 ---
 # Cosas en el tintero
