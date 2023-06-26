@@ -133,6 +133,35 @@ Los diccionarios usados en los 2 últimos puntos se pueden ver en la notebook. E
 ---
 # Notebook `resolucion02`: 
 
+> Discriminación por tipo de variable
+
+Las 14 variables dadas pueden discrimnarse en 3 categorías:
+* Variables temporales: `Año` y `Mes`. 
+* Variables categóricas: `ID`, `DGR`, `Categoria`, `Trat_Fisc_Agg`, `Trat_Fisc`, `Trat_Dif`, `CM`, `Deposito` y `Modelo`.
+* Variables numéricas: `Ventas`, `Alicuota` y `Comision`.
+
+A partir de esto se crean los DataFrame `ven_temp`, `ven_cat` y `ven_num`, respectivamente, para facilitar la manipulación en el código.
+
+> Estadística descriptiva sin considerar series temporales
+
+Vemos que en la variable `Alicuota` la dispersión de los datos está en el orden de la media, tomando valores desde 0% hasta 18%. Esto se ve reflejado en un z-Score que va desde -1 a 6. Esta tendencia a tener la cola derecha más larga también se nota en las otras dos variables. Sin embargo, en estos dos últimos casos la dispersión de datos es enorme: la desviación estándar es un orden mayor que la media y el extremo superior del z-Score está en 101 y 131 para `Ventas` y `Comision`, respectivamente.
+
+Tanto `Ventas` como `Comision` tienen prácticamente un 42% de registros con valores nulos y un 0.32% de valores negativos, *i.e.* hay un 42-43% de registros con valores no positivos imputados. Por su parte, `Alicuota` no posee registros negativos, pero sí tiene un 0.64% de registros nulos. Dado el enorme peso de los valores nulos sobre el total de registros, tanto en `Ventas` como en `Comision`, se decide dividir este DataFrame en dos: uno donde se filtra por `Ventas` nulas (`ven_num_null`) y otro que contenga los registros restantes (`ven_num_not`). Al hacer esto, vemos en la siguiente figura que todos los valores de `Comision` en `ven_num_null` también son nulos, independientemente del valor de `Alicuota`, la cual sigue ocupando el rango de 0% a 18%.
+![pairplot_varnum_null](pairplot_varnum_null.png)
+
+Por otra parte, al analizar `ven_num_not` se tiene que, aunque la asimetría de las distribuciones hacia la derehca sigue siendo bastante grande, es mucho menor de lo que era antes: el extremo superior del z-Score bajó a 77 y 101 para `Ventas` y `Comision`, respectivamente. A diferencia de `ven_num_null` donde tener una valor de venta nulo implicaba una comisión nula, en `ven_num_not` se presentan casos donde la comisión es nula a pesar de que la venta no fue nula. Esto podría estar asociado a las alícuotas nulas o a ciertos tratamientos fiscales. En los histogramas de la diagonal principal de la siguiente figura se puede apreciar la gran asimetría antes mencionada sobre la distribuciones de `Ventas` y `Comision`. Notamos admeás que `Alicuota` puede asociarse a una distribución prácticamente bimodal en torno al 0.0475% y el 5%. Vemos también que:
+* La mayoría de las ventas y comisiones están asociadas a alícuotas menores al 5%.
+* Se proyectan diferentes rectas entre `Ventas` y `Comision`: ¿existe una relación de proporcionaldiad con `Alicuota`?
+
+![pairplot_varnum_not](pairplot_varnum_not.png)
+
+Al analizar la asimetría (skewness) y la Kurtosis sobre estas variables decimos que:
+* Todas tienen un sesgo positivo como veníamos diciendo, por lo que la cola de sus distribuciones se encuentra a derecha.
+* Todas son leptocúrticas: están más apuntaladas y con colas más gruesas que la normal.
+* Todos los p-valores son nulos en ambos test, lo cual indica que rechazamos la hipótesis nula: tanto en simetría como en Kurtosis las distribuciones son significativamente diferentes a una distribución normal.
+
+
+
 ---
 # Cosas en el tintero
 
@@ -141,3 +170,8 @@ Los diccionarios usados en los 2 últimos puntos se pueden ver en la notebook. E
 * `TRATAMIENTO_FISCAL` vs `DESC_TRATAMIENTO_FISCAL`
 * ¿Tiene sentido que la DGR haya provisto 2 códigos de `INSCRIPCION` para un mismo `ID_VENDEDOR`?
 * Valores negativos en ventas y comisiones ¿crédito o error?
+* Analizando los porcentajes de comisión, ¿tiene sentido que haya porcentajes nulos? Puede deberse a algo fiscal
+* Hay que decidir sobre las variables numéricas:
+    * Qué hacemos con valores negativos.
+    * Qué hacemos con valores nulos.
+    * Si truncamos valores extremos y, en caso afirmativo, la manera/los límites.
