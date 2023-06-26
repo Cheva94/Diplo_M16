@@ -160,6 +160,26 @@ Al analizar la asimetría (skewness) y la Kurtosis sobre estas variables decimos
 * Todas son leptocúrticas: están más apuntaladas y con colas más gruesas que la normal.
 * Todos los p-valores son nulos en ambos test, lo cual indica que rechazamos la hipótesis nula: tanto en simetría como en Kurtosis las distribuciones son significativamente diferentes a una distribución normal.
 
+> Interpretación de la relación entre variables numéricas con etiquetas categóricas
+
+Los pairplot de antes se repitieron, pero esta vez utilizando las categorías `Categoria`, `Trat_Fisc_Agg`, `Trat_Fisc`, `Trat_Dif`, `CM` y `Modelo` para etiquetarlos. Analizando primero los datos de ventas nulas, se tiene que prácticamente todos los puntos tienen un tratamiento fiscal agregado normal y no tienen tratamiento diferencial ni forman parte del convenio multilateral. Además prácticamente todos los registros pertenecen a vendedores que no son modelo.
+
+Considerando ahora las ventas no nulas, podemos decir que prácticamente todos los puntos tienen un tratamiento fiscal agregado normal, no son vendedores modelo y no tienen tratamiento diferencial. Se destaca que tanto las alícuotas como las proyecciones de las rectas se logran diferenciar según la `Categoria` (ver próxima figura).
+![hueCat](pairplot_varnum_hueCat.png)
+
+Otro dato no menor es que **todos** los registros con ventas no nulas están asociadas a vendedores que no forman parte del convenio multilateral o, en otros términos, todos los registros que sí forman parte del convenio multilateral tienen ventas nulas. 
+
+> Vendedor 1638
+
+Analizando a qué vendedores pertenecían los 42 registros que forman parte del convenio multilateral, encontramos que están asociadas a un único vendedor: el vendedor número 1638. Filtrando los registros pertenecientes a este vendedor, se tiene que presenta un único valor en todas las variables, salvo en `Alicuota` donde tiene 3 posibles valores (0.00%, 4.00% y 4.75%). Los 42 registros hacen referencia a los 42 meses que forman parte del dataset: ningún mes realizó ventas y en todos ingresó exactamente el mismo valor en todos los campos, salvo en Alícuota. Además, este vendedor es el único que tiene `DGR` igual a 1638
+
+Esto plantea dos posibles situaciones:
+1. Podemos descartar todos los registros asociados a este vendedor y, a su vez, descartar la variable `CM`, ya que quedaría con un único valor posibles.
+2. Este vendedor es en realidad un vendedor que está fugando sus ventas fuera de la plataforma.
+
+Incluso siendo cierto el segundo caso, igual podríamos hacer el descarte ahora, seguir adelante con los demás análisis y, al momento de tener listo el modelo, incluir este vendedor en el subconjunto de datos de evaluación.
+
+> Análisis de la relación entre variables numéricas
 
 
 ---
