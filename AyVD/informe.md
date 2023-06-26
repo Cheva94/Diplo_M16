@@ -169,15 +169,19 @@ Considerando ahora las ventas no nulas, podemos decir que prácticamente todos l
 
 Otro dato no menor es que **todos** los registros con ventas no nulas están asociadas a vendedores que no forman parte del convenio multilateral o, en otros términos, todos los registros que sí forman parte del convenio multilateral tienen ventas nulas. 
 
-> Vendedor 1638
+> Convenio multilateral y el vendedor 1638
 
-Analizando a qué vendedores pertenecían los 42 registros que forman parte del convenio multilateral, encontramos que están asociadas a un único vendedor: el vendedor número 1638. Filtrando los registros pertenecientes a este vendedor, se tiene que presenta un único valor en todas las variables, salvo en `Alicuota` donde tiene 3 posibles valores (0.00%, 4.00% y 4.75%). Los 42 registros hacen referencia a los 42 meses que forman parte del dataset: ningún mes realizó ventas y en todos ingresó exactamente el mismo valor en todos los campos, salvo en Alícuota. Además, este vendedor es el único que tiene `DGR` igual a 1638
+Analizando a qué vendedores pertenecían los 42 registros que forman parte del convenio multilateral, encontramos que están asociadas a un único vendedor: el vendedor número 1638. Filtrando los registros pertenecientes a este vendedor, se tiene que presenta un único valor en todas las variables, salvo en `Alicuota` donde tiene 3 posibles valores (0.00%, 4.00% y 4.75%). Los 42 registros hacen referencia a los 42 meses que forman parte del dataset: ningún mes realizó ventas y en todos ingresó exactamente el mismo valor en todos los campos, salvo en Alícuota. Además, este vendedor es el único que tiene `DGR` igual a 1638.
 
 Esto plantea dos posibles situaciones:
 1. Podemos descartar todos los registros asociados a este vendedor y, a su vez, descartar la variable `CM`, ya que quedaría con un único valor posibles.
 2. Este vendedor es en realidad un vendedor que está fugando sus ventas fuera de la plataforma.
 
-Incluso siendo cierto el segundo caso, igual podríamos hacer el descarte ahora, seguir adelante con los demás análisis y, al momento de tener listo el modelo, incluir este vendedor en el subconjunto de datos de evaluación.
+Incluso siendo cierto el segundo caso, igual podríamos hacer el descarte ahora, seguir adelante con los demás análisis y, al momento de tener listo el modelo, incluir este vendedor en el subconjunto de datos de evaluación. Por este motivo, apartamos sus registros en `DatasetsProcesados/vendedor1638_CM_13Cols_42Regs.csv`. Además, se guardaron otros dos datasets:
+* Todos los registros que contienen ventas no nulas: `DatasetsProcesados/ventas_noNulas_13Cols_250448Regs.csv`
+* Todos los registros que contienen ventas nulas, sin contar al vendedor 1638: `DatasetsProcesados/ventas_Nulas_13Cols_181016Regs.csv`
+
+En todos los casos se ha descartado la columna `CM`, por lo que el disclaimer de uso del dataset debe actualizarse contemplando esto: nadie forma parte del convenio multilateral, salvo el vendedor 1638. Tenemos además que, al fragmentar el dataset grande en estos 3 subdatasets, éstos pesan 2.6 KB, 18.8 MB y 11.2 MB, respectivamente. Como todos los pesos son menores a 25 MB, ya no es necesario hostear en dropbox los dataset, sino que pueden ser pusheados a GitHub.
 
 > Análisis de la relación entre variables numéricas
 
