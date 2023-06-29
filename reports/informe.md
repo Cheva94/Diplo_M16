@@ -128,7 +128,9 @@ Los diccionarios usados en los 2 últimos puntos se pueden ver en la notebook. E
 
 ![mapeo_ej](figures/mapeo_ej.png)
 
-***Nota:*** el dataset resultante de todas estas modificaciones asignado en el DataFrame `ven_cln_map` está hosteado [aquí](https://www.dropbox.com/scl/fi/684jriu2g52lqyv45z53s/ven_cln_map.csv?dl=1&rlkey=hr7lcqja46a9fj5bdx7ofdgah). Cabe destacar que el dataset crudo pesaba 220 MB y este nuevo dataset pesa 31 MB.
+***Nota:*** el dataset resultante de todas estas modificaciones asignado en el DataFrame `ven_cln_map` está hosteado [aquí](https://www.dropbox.com/scl/fi/w6v59wfzkq238g5jl32ul/ven_cln_map.csv?dl=1&rlkey=mthrsum653sedc6sf0g08dx29). Cabe destacar que el dataset crudo pesaba 220 MB y este nuevo dataset pesa 31 MB.
+
+
 
 ---
 # Notebook `resolucion02`: 
