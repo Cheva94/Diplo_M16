@@ -28,7 +28,7 @@ El dataset provisto consta de 431506 registros con información sobre las ventas
 * **NOMBRE:** identificación del vendedor, asociada al nombre *real* (persona física o jurídica) del mismo. Tipo: string. Cantidad de valores únicos: 3199.
 * **MODELO:** código de identificación de vendedores considerados modelo por parte del cliente. Tipo: entero. Cantidad de valores únicos: 2 (0 categoriza los que no son vendedores modelo, mientras que 1 los posiciona como tales).
 * **DEPOSITO:** identificación del depósito de stock desde el cual se efectúan las ventas. Tipo: entero. Cantidad de valores únicos: 241.
-* **INSCRIPCION:** código de inscripción provisto por la DGR. Tipo: entero. Cantidad de valores únicos: 3345.
+* **INSCRIPCION:** código de inscripción a la plataforma del cliente. Tipo: entero. Cantidad de valores únicos: 3345.
 * **AÑO:** año de imputación del registro. Tipo: entero. Cantidad de valores únicos: 4 (desde 2019 hasta 2022).
 * **MES:** mes de imputación del registro. Tipo: entero. Cantidad de valores únicos: 12 (desde Enero hasta Diciembre).
 * **TOTAL_VENTAS:** monto total de ventas (base imponible). Tipo: flotante. Cantidad de valores únicos: 248974.
@@ -36,12 +36,12 @@ El dataset provisto consta de 431506 registros con información sobre las ventas
 * **COMISION_EMPRESA:** comisión por las ventas en la plataforma (valor). Tipo: flotante. Cantidad de valores únicos: 244284.
 * **CATEGORIA:** descripción del Código de Actividad Codiguero NAES Año 2018 y siguientes. Tipo: string. Cantidad de valores únicos: 5.
 * **CATEGORIA (Ajustado):** variable `CATEGORIA` limpia, *i.e.* se redujo el número de valores posibles. Tipo: string. Cantidad de valores únicos: 1 ("COMERCIO AL POR MAYOR Y AL POR MENOR; REPARACION DE VEHÍCULOS AUTOMOTORES Y MOTOCICLETAS").
-* **DESCRIPCION_CATEGORIA:** subrubro definido por la DGR (Dato Interno, no declarado por el contribuyente). Tipo: string. Cantidad de valores únicos: 245.
+* **DESCRIPCION_CATEGORIA:** subrubro definido por la DGR (dato Interno, no declarado por el contribuyente). Tipo: string. Cantidad de valores únicos: 245.
 * **SUB-CATEGORIA:** variable `DESCRIPCION_CATEGORIA` limpia, *i.e.* se redujo el número de valores posibles. Tipo: string. Cantidad de valores únicos: 21.
 * **DESC_TRATAMIENTO_FISCAL:** indica qué tratamiento fiscal se le da a la operación, especialmente respecto a la alícuota a cobrarle. Tipo: string. Cantidad de valores únicos: 4.
 * **TRATAMIENTO_FISCAL:** análogo a `DESC_TRATAMIENTO_FISCAL`, pero desglosado. Tipo: string. Cantidad de valores únicos: 17.
 * **TRATAMIENTO_DIFERNCIAL:** indica el artículo de alguna reglamentación aplicado para dar tratamiento fiscal especial. Tipo: string. Cantidad de valores únicos: 11.
-* **CM04:** identifica operaciones que se ejecutan bajo un Convenio Multilateral (CM). Tipo: string. Cantidad de valores únicos: 1 ("Sí").
+* **CM04:** identifica operaciones que se ejecutan bajo un Convenio Multilateral (CM), el cual tiene lugar cuando las operaciones se dan entre provincias diferentes. Tipo: string. Cantidad de valores únicos: 1 ("Sí").
 * **OMEGA:** identifica contribuyentes de interés fiscal especial. Tipo: entero. Cantidad de valores únicos: 1 (valor 1).
 
 En resumen, cada registro informa la suma total de las ventas efectuadas por cada vendedor en alguno de los depósitos donde tiene stock de sus productos, para un mes y año dados. Por razones de sensibilidad de los datos y la confidencialidad necesaria, las variables que refieren a datos personales (`ID_VENDEDOR` y `NOMBRE`) fueron anonimizadas mediante hasheo.
