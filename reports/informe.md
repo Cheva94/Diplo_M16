@@ -133,7 +133,7 @@ Los diccionarios usados en los 2 últimos puntos se pueden ver en la notebook. E
 
 
 ---
-# Notebook `resolucion02`: 
+# Notebook `resolucion02`: análisis detallado
 
 > Discriminación por tipo de variable
 
