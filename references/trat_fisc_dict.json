@@ -1,0 +1,16 @@
+{
+    "0.0": "0",
+    "1.0": "1",
+    "2.0": "2",
+    "3.0": "3",
+    "Especial 1": "Esp.1",
+    "Especial 2": "Esp.2",
+    "Especial 3": "Esp.3",
+    "Especial 4": "Esp.4",
+    "Normal": "Norm",
+    "Minorista": "Min",
+    "Alícuota reducida": "Alic.Reduc",
+    "Alícuota agravada": "Alic.Agrav",
+    "Exento/Desgravado": "Exento",
+    "Mera Compra": "MeraComp"
+}
