@@ -16,13 +16,13 @@
 ---
 # Notebook `resolucion01`: exploración inicial
 
-> Tamaño del dataset y significado de los registros
+## Tamaño del dataset y significado de los registros
 
 El dataset provisto (denominado `ventas` en la notebook) consta de 431506 registros con información sobre las ventas realizadas por los vendedores dentro de la plataforma de ventas online del cliente. Dicha información viene caracterizada por 19 variables. La definición de cada una de estas variables se tiene en el data statement. En resumen, cada registro informa la suma total de las ventas efectuadas por cada uno de los depósitos de cada vendedor, para un mes y año dados. Por razones de sensibilidad de los datos y la confidencialidad necesaria, las variables que refieren a datos personales (`ID_VENDEDOR` y `NOMBRE`) fueron anonimizadas mediante hasheo.
 
 ***Nota:*** el dataset crudo que se levanta en el DataFrame `ventas` está hosteado [aquí](https://www.dropbox.com/scl/fi/iaagjtks3apflrywvomuv/muestra_diplodatos_ventas_2023.csv?dl=1&rlkey=zfsh0bnwbomd4g56bcjysytiy).
 
-> Datos faltantes
+## Datos faltantes
 
 Entre las 19 variables disponibles tenemos 5 con valores faltantes: 
 1. **CM04:** sólo hay 42 registros (menos del 0.01% del total de registros).
@@ -31,7 +31,7 @@ Entre las 19 variables disponibles tenemos 5 con valores faltantes:
 4. **TRATAMIENTO_FISCAL:** tiene 403538 registros (más del 90% del total de registros).
 5. **NOMBRE:** tiene 430857 registros (casi el total de registros).
 
-> Cardinalidad: valores únicos de las variables
+## Cardinalidad: valores únicos de las variables
 
 Se determinó cuántos valores únicos hay presentes en cada una de las 19 variables. Además, se analizó la contribución porcentual del valor mayoritario y, en caso de ser posible, la contribución porcentual de los 10 valores mayoritarios. Se tiene que:
 1. **ID_VENDEDOR:** tiene 3209 valores diferentes. El valor mayoritario (vendedor f679b20b02309cab33658571f0c8da237f57f732ab96978386a95c2776f07c21) contribuye en un 0.39% de los registros y los 10 primeros en conjunto contribuyen al 2.85%
@@ -54,7 +54,7 @@ Se determinó cuántos valores únicos hay presentes en cada una de las 19 varia
 18. **COMISION_EMPRESA:** tiene 244284 valores diferentes. El valor mayoritario (comisión de $0 para el cliente) contribuye en un 42.52% de los registros y los 10 primeros en conjunto contribuyen al 42.56%.
 19. **MODELO:** tiene 2 valores diferentes: 0 y 1. Sólo el 0.32% de los registros (valor 1) es considerado **vendedor modelo** por parte del cliente.
 
-> Observaciones hasta ahora
+## Observaciones hasta ahora
 
 Considerando lo dicho hasta el momento, podemos hacer las siguientes observaciones:
 * Si bien la distribución de porcentajes son similares entre `NOMBRE` y `ID_VENDEDOR`, los hashs son diferentes y, además, hay 10 nombres únicos menos. Considerando ésto más el hecho de que hay 649 registros sin valor en la variable `NOMBRE`, podemos pensar que hay 2 situaciones que pueden estar ocurriendo en simultáneo:
@@ -85,7 +85,7 @@ Considerando lo dicho hasta el momento, podemos hacer las siguientes observacion
 
 Concluimos esta sección analizando por qué pandas nos da el DtypeWarning con las variables `TRATAMIENTO_FISCAL`, `DESC_TRATAMIENTO_FISCAL` y `CM04`. Aunque las 3 variables poseen valores faltantes, en los 3 casos vemos que toman valores del tipo int64. Desconocemos entonces el origen de este aviso.
 
-> Descarte de variables
+## Descarte de variables
 
 En base a lo visto hasta acá, se podría prescindir de:
 * `NOMBRE` ya que tiene la misma información que `ID_VENDEDOR`, pero puede tener problemas de degeneración.
@@ -95,29 +95,34 @@ En base a lo visto hasta acá, se podría prescindir de:
 
 El dataset resultante (denominado `ventas_clean` en la notebook) consta entonces de los 431506 registros, pero ahora con 14 variables. El mismo debe usarse entonces teniendo en cuenta el siguiente disclaimer: <span style="color:red"> *Todos los registros en este dataset fueron filtrados de un dataset mayor según la categoría "COMERCIO AL POR MAYOR Y AL POR MENOR; REPARACION DE VEHÍCULOS AUTOMOTORES Y MOTOCICLETAS" y Omega = 1*. </span>
 
-> Imputación de valores faltantes
+## Imputación de valores faltantes
 
 Se imputaron en `ventas_clean` los valores faltantes en las variables `CM04` y `TRATAMIENTO_DIFERNCIAL` completando con el valor "No". De este modo, las únicas variables que aún tienen valores faltantes son `DESC_TRATAMIENTO_FISCAL` y `TRATAMIENTO_FISCAL`: siguen manteniendo una correlación de nuldiad de +0.2. Por su parte, la correlación de nulidad entre `TRATAMIENTO_FISCAL` y `TRATAMIENTO_DIFERNCIAL` desaparece.
 
-> Simplificación de variables
+## Simplificación de variables
 
-Se modifican los nombres de las variables para facilitar su manipulación en el código. Para ello, se usó el siguiente diccionario:
-* `ID_VENDEDOR` >>> `ID`.
-* `INSCRIPCION` >>> `Inscripcion`.
-* `SUB-CATEGORIA` >>> `Categoria`.
-* `DESC_TRATAMIENTO_FISCAL` >>> `Trat_Fisc_Agg`.
-* `TRATAMIENTO_FISCAL` >>> `Trat_Fisc`.
-* `TRATAMIENTO_DIFERNCIAL` >>> `Trat_Dif`.
-* `CM04` >>> `CM`.
-* `AÑO` >>> `Año`.
-* `MES` >>> `Mes`.
-* `DEPOSITO` >>> `Deposito`.
-* `TOTAL_VENTAS` >>> `Ventas`.
-* `PORCENTAJE_COMISION_EMPRESA` >>> `Alicuota`.
-* `COMISION_EMPRESA` >>> `Comision`.
-* `MODELO` >>> `Modelo`.
+Se modifican los nombres de las variables para facilitar su manipulación en el código. Para ello, se usó el siguiente diccionario (/references/column_dict.json):
 
-> Simplificación de valores
+```
+{
+    "ID_VENDEDOR": "ID",
+    "INSCRIPCION": "Inscripcion",
+    "SUB-CATEGORIA": "Categoria",
+    "DESC_TRATAMIENTO_FISCAL": "Trat_Fisc_Agg",
+    "TRATAMIENTO_FISCAL": "Trat_Fisc",
+    "TRATAMIENTO_DIFERNCIAL": "Trat_Dif",
+    "CM04": "CM",
+    "AÑO": "Año",
+    "MES": "Mes",
+    "DEPOSITO": "Deposito",
+    "TOTAL_VENTAS": "Ventas",
+    "PORCENTAJE_COMISION_EMPRESA": "Alicuota",
+    "COMISION_EMPRESA": "Comision",
+    "MODELO": "Modelo"
+}
+```
+
+## Simplificación de valores
 
 Existen variables cuyos valores está expresados de manera tal que complejizan el análisis, complicando tanto su manipulación como la lectura e interpretación de tablas y gráficos. Pretendemos eliminar esta capa de complejidad innecesaria, transformando las variables de alguna manera. Dichas variables son:
 * Variables con valores tipo string o entero, pero que en realidad pueden tomarse como indicadoras: `ID`, `Inscripcion`, `Deposito` y `CM`. En los 3 primeros casos, se pretende mapear el valor original a un entero, considerando simplemente el orden de aparación en el propio dataset. En el caso de `CM` se asignará "Si" >> 1 y "No" >> 0.
@@ -135,7 +140,7 @@ Los diccionarios usados en los 2 últimos puntos se pueden ver en la notebook. E
 ---
 # Notebook `resolucion02`: análisis detallado
 
-> Discriminación por tipo de variable
+## Discriminación por tipo de variable
 
 Las 14 variables dadas pueden discrimnarse en 3 categorías:
 * Variables temporales: `Año` y `Mes`. 
@@ -144,7 +149,7 @@ Las 14 variables dadas pueden discrimnarse en 3 categorías:
 
 A partir de esto se crean los DataFrame `ven_temp`, `ven_cat` y `ven_num`, respectivamente, para facilitar la manipulación en el código.
 
-> Estadística descriptiva sin considerar series temporales
+## Estadística descriptiva sin considerar series temporales
 
 Vemos que en la variable `Alicuota` la dispersión de los datos está en el orden de la media, tomando valores desde 0% hasta 18%. Esto se ve reflejado en un z-Score que va desde -1 a 6. Esta tendencia a tener la cola derecha más larga también se nota en las otras dos variables. Sin embargo, en estos dos últimos casos la dispersión de datos es enorme: la desviación estándar es un orden mayor que la media y el extremo superior del z-Score está en 101 y 131 para `Ventas` y `Comision`, respectivamente.
 
@@ -162,7 +167,7 @@ Al analizar la asimetría (skewness) y la Kurtosis sobre estas variables decimos
 * Todas son leptocúrticas: están más apuntaladas y con colas más gruesas que la normal.
 * Todos los p-valores son nulos en ambos test, lo cual indica que rechazamos la hipótesis nula: tanto en simetría como en Kurtosis las distribuciones son significativamente diferentes a una distribución normal.
 
-> Interpretación de la relación entre variables numéricas con etiquetas categóricas
+## Interpretación de la relación entre variables numéricas con etiquetas categóricas
 
 Los pairplot de antes se repitieron, pero esta vez utilizando las categorías `Categoria`, `Trat_Fisc_Agg`, `Trat_Fisc`, `Trat_Dif`, `CM` y `Modelo` para etiquetarlos. Analizando primero los datos de ventas nulas, se tiene que prácticamente todos los puntos tienen un tratamiento fiscal agregado normal y no tienen tratamiento diferencial ni forman parte del convenio multilateral. Además prácticamente todos los registros pertenecen a vendedores que no son modelo.
 
@@ -171,7 +176,7 @@ Considerando ahora las ventas no nulas, podemos decir que prácticamente todos l
 
 Otro dato no menor es que **todos** los registros con ventas no nulas están asociadas a vendedores que no forman parte del convenio multilateral o, en otros términos, todos los registros que sí forman parte del convenio multilateral tienen ventas nulas. 
 
-> Convenio multilateral y el vendedor 1638
+## Convenio multilateral y el vendedor 1638
 
 Analizando a qué vendedores pertenecían los 42 registros que forman parte del convenio multilateral, encontramos que están asociadas a un único vendedor: el vendedor número 1638. Filtrando los registros pertenecientes a este vendedor, se tiene que presenta un único valor en todas las variables, salvo en `Alicuota` donde tiene 3 posibles valores (0.00%, 4.00% y 4.75%). Los 42 registros hacen referencia a los 42 meses que forman parte del dataset: ningún mes realizó ventas y en todos ingresó exactamente el mismo valor en todos los campos, salvo en Alícuota. Además, este vendedor es el único que tiene `Inscripcion` igual a 1638.
 
@@ -185,7 +190,7 @@ Incluso siendo cierto el segundo caso, igual podríamos hacer el descarte ahora,
 
 En todos los casos se ha descartado la columna `CM`, por lo que el disclaimer de uso del dataset debe actualizarse contemplando esto: nadie forma parte del convenio multilateral, salvo el vendedor 1638. Tenemos además que, al fragmentar el dataset grande en estos 3 subdatasets, éstos pesan 2.6 KB, 18.8 MB y 11.2 MB, respectivamente. Como todos los pesos son menores a 25 MB, ya no es necesario hostear en dropbox los dataset, sino que pueden ser pusheados a GitHub.
 
-> Análisis de la relación entre variables numéricas
+## Análisis de la relación entre variables numéricas
 
 Queremos estudiar un poco más la relación lineal antes vista entre estas 3 variables. Proponemos que la función que las relaciona es
     $$\text{Comision} = \text{Alicuota} \times \text{Ventas}$$
@@ -202,12 +207,44 @@ La fórmula se cumple en la totalidad de registros con ventas nulas, mientras qu
 
 En la notebook se puede ver además que todos los vendedores modelo caen dentro de la recta de menor pendiente, la cual establece prácticamente una relación de proporcionalidad directa entre las ventas y la comisión de la empresa. Por su parte, los que no están clasificados como modelo caen sobre ambas rectas. ¿Podría ser este un camino para detectar la fuga?
 
+## Análisis de variables categóricas
+
+Al comparar las variables `Trat_Fisc` y `Trat_Fisc_Agg`, vemos que los valores de `Trat_Fisc_Agg` solo aparecen cuando `Trat_Fisc` asume valores 0, 1, 2 ó 3. A su vez, hay correspondencia entre 0 y Normal, 1 y Exento/Desgravado, 2 y Minorista, 3 y Otro Tratamiento Fiscal.
+Sin embargo, no queda claro por qué faltan valores de `Trat_Fisc_Agg`.
+
+Al comparar `Trat_Fisc` con `Trat_Dif` no hay un patrón claro de correspondencia entre valores. 
+
+Por otra parte al analizar el comportamiento de la variable `Modelo` respecto a `Ventas`, se observa que los vendedores modelo no necesariamente tienen mayor media de ventas, pero sí menor desviación estándar.
+
+## Análisis de la serie temporal
+
+Consideramos que para el análisis temporal habrá momentos en que necesitamos tener Año y Mes por separado, pero en otras ocasiones necesitamos toda la información al mismo tiempo. Por lo tanto, creamos la variable Fecha:
+    $$Fecha = Año + Mes$$
+
+Vamos a considerar que la serie temporal **principal** es la dictada por `Ventas`.
+
+![hueCat](figures/ventas.jpeg)
+
+Agrupando los datos por meses, se observa que las ventas crecen, en principio por efecto de la inflación y pareciera haber picos hacia fin de año.
+
+Considerando una serie de `Ventas` para cada año, y sobreponiéndolas en el mismo gráfico, se observa el fenómeno de estacionalidad descripto anteriormente, con mínimos cercanos a enero y febrero, y máximos en diciembre.
+
+En una primera aproximación, se identifican ciertos **outiliers**, como aquellos valores de `Ventas` negativos, ceros y extremos positivos (encima del percentil 98).
+Al graficar mes a mes la cantidad de los diferentes tipos de outliers definidos, el más llamativo es el de valores negativos. Los cuales tienden a alcanzar picos en el mes de abril, de momento no habiendo explicaciones sobre este comportamiento. Podría deberse a algo relacionado al ciclo de facturación o a la liquidación de algún impuesto.
+
+![hueCat](figures/negativos.jpeg)
+
+Por último, hay correlación estadísticamente significativa para los lags 1, 2 y 3 de la variable `Ventas`, lo que implica que observaciones pasadas influyen en las observaciones actuales de la serie temporal de manera positiva.
+
 ---
 # Cosas en el tintero
 
 * Ver qué `ID_VENDEDOR` se agrupan en qué `DEPOSITO`.
 * Ver tratamiento que se hace con $0 en `TOTAL_VENTAS` y `COMISION_EMPRESA`.
 * `TRATAMIENTO_FISCAL` vs `DESC_TRATAMIENTO_FISCAL`
+¿Se puede unificar todo como `Trat_Fisc`, eliminando entonces `Trat_Fisc_Agg`? ¿Tiene sentido que falte la descripción asociada al tratamiento?
+¿Podríamos tomar a un dato faltante de `Trat_Dif` como "sin tratamiento" o algo por el estilo?
+
 * ¿Tiene sentido que la DGR haya provisto 2 códigos de `INSCRIPCION` para un mismo `ID_VENDEDOR`?
 * Valores negativos en ventas y comisiones ¿crédito o error?
 * Analizando los porcentajes de comisión, ¿tiene sentido que haya porcentajes nulos? Puede deberse a algo fiscal
