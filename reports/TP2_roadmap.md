@@ -10,17 +10,17 @@ Generar variables que discriminen vendedores ‘modelos’ de ‘no modelos’.
 
 * Como va a ser un nuevo dataset, creo que deberíamos repetir algunas cosas del práctico anterior, para chequear que ciertos supuestos y resultados que vimos se sigan cumpliendo o, en caso de no hacerlo, actuar en consecuencia. Igual iría al hueso, no tan "exploratorio" ya que más o menos sabemos cómo viene la mano.
 
-* En este sentido, esta primera parte incluye el `Paso 1`. Al medio hacer las discriminaciones que ya habíamos hecho antes (el CM -esto es `Paso 4`-, los nulos y los no nulos - quizás mejor positivos y negativos-, etc). Observación: quizás esta diferenciación no haga falta ahora, ya que después vamos a hacer el dataset de vendedores como registros y quizás ahí quede resumido esto. Incluso es probable que ahí la podamos entender mejor.
+* En este sentido, esta primera parte incluye el `Paso 1`. Al medio hacer las discriminaciones que ya habíamos hecho antes (el CM -esto es `Paso 4`-, los nulos y los no nulos - quizás mejor positivos y negativos-, etc). Observación: quizás esta diferenciación no haga falta ahora, ya que después vamos a hacer el dataset de vendedores como registros y quizás ahí quede resumido esto. Incluso es probable que ahí la podamos entender mejor. Vendedores que tienen los 4 registros nulos: tirarlos (ojo chequear tema modelo).
 
 * Respecto al `Paso 3` medio que ya lo hicimos al mapear el hash a un entero, no? Y tenemos el dic por si hace falta identificarlo puntualmente al vendedor. Respecto a esto me parece que dijeron que revisemos el data statement. Habla de variables demográficas: la única demográfica es la CM04 me parece. La idea de anonimizar es evitar que la identificación sea unívoca: quizás está haseado, pero es el único vendedor con ventas de un millón, entonces se puede identificar de todas formas. No es necesario borrar el registro, sino alterarlo de alguna forma que evite esta identificación unívoca. Por ejemplo, poner rango de valores (decidir granularidad).
 
-* Para el `Paso 6` ya hicimos lo de crear la variable "Fecha". Además, ploteamos cosas agrengado por años y por meses. Entiendo que refiere más a eso.
-
-* El `Paso 5` nos pide que tomemos una decisión respecto a las 3 variables de tratamiento fiscal. Con lo dicho hasta ahora no sé cuál tirar y cuál quedarnos.
+* Para el `Paso 6` ya hicimos lo de crear la variable "Fecha". Además, ploteamos cosas agrengado por años y por meses. Entiendo que refiere más a eso. Cuota es mes.
 
 * Podemos cerrar esta primera parte con el `Paso 2`. Notas de la grabación (parte 1):
     * Me importan sólo los rubros donde sí tengo vendedores modelo dentro. Los otros ni ahí. ¿Una vez que generamos la categoría "Otros" podemos tirar todos estos registros? (de última no tirarlos y chau, sino separarlos en un dataset, por si en el futuro lo necesitamos). Lo de tirar es porque no voy a poder tener un predictor para ese rubro al no tener un modelo como guía.
     * ¿Por qué es tan importante lo de separar por subrubro? Alguien con conocimieno de dominio nos dijo que algo que diferencia las ventas son los rubros, cada uno tiene un nivel de ventas distinto. Resulta incluso más importante diferenciar por rubro que por cosas fiscales. ¿Quizás discriminar primero por rubro y dentro de cada rubro discriminar fiscalmente? Podemos hacer alguna gráfica para cada subrubro, discriminando por las variables fiscales y ahí podemos ver cuál nos da más info y decidir con cuál quedarnos. 
+
+* El `Paso 5` nos pide que tomemos una decisión respecto a las 3 variables de tratamiento fiscal. Con lo dicho hasta ahora no sé cuál tirar y cuál quedarnos.
 
 * Hacer de nuevo 2 notebooks? Y que todo esta primera parte vaya al uno?
 

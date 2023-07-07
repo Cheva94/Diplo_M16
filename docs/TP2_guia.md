@@ -1,4 +1,4 @@
-# TP2 - Análisis exploratorio y curación de datos
+# TP2 - Curación
 
 ## Objetivo
 Generar variables que discriminen vendedores ‘modelos’ de ‘no modelos’.
