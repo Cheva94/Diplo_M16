@@ -235,20 +235,3 @@ Al graficar mes a mes la cantidad de los diferentes tipos de outliers definidos,
 ![hueCat](figures/negativos.jpeg)
 
 Por último, hay correlación estadísticamente significativa para los lags 1, 2 y 3 de la variable `Ventas`, lo que implica que observaciones pasadas influyen en las observaciones actuales de la serie temporal de manera positiva.
-
----
-# Cosas en el tintero
-
-* Ver qué `ID_VENDEDOR` se agrupan en qué `DEPOSITO`.
-* Ver tratamiento que se hace con $0 en `TOTAL_VENTAS` y `COMISION_EMPRESA`.
-* `TRATAMIENTO_FISCAL` vs `DESC_TRATAMIENTO_FISCAL`
-¿Se puede unificar todo como `Trat_Fisc`, eliminando entonces `Trat_Fisc_Agg`? ¿Tiene sentido que falte la descripción asociada al tratamiento?
-¿Podríamos tomar a un dato faltante de `Trat_Dif` como "sin tratamiento" o algo por el estilo?
-
-* ¿Tiene sentido que la DGR haya provisto 2 códigos de `INSCRIPCION` para un mismo `ID_VENDEDOR`?
-* Valores negativos en ventas y comisiones ¿crédito o error?
-* Analizando los porcentajes de comisión, ¿tiene sentido que haya porcentajes nulos? Puede deberse a algo fiscal
-* Hay que decidir sobre las variables numéricas:
-    * Qué hacemos con valores negativos.
-    * Qué hacemos con valores nulos.
-    * Si truncamos valores extremos y, en caso afirmativo, la manera/los límites.
