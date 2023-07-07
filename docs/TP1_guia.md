@@ -1,4 +1,4 @@
-# TP1 - Mentoría
+# TP1 - Análisis y visualización de datos
 
 Las principales preguntas de investigación que nos planteamos son:
 1. Con los datos disponibles ¿se puede predecir cuáles serán los **mejores vendedores de la empresa**?
