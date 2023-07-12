@@ -69,14 +69,14 @@ Considerando lo dicho hasta el momento, podemos hacer las siguientes observacion
 * Al mirar con detenimiento los valores únicos de `TRATAMIENTO_FISCAL`, notamos que hay que unificar categorías, como es el caso de 0 y 0.0, por ejemplo. No olvidar que esta variable es un desglose de la variable `DESC_TRATAMIENTO_FISCAL`, la cual contiene solamente 4 valores únicos.
 * Tanto la variable `TRATAMIENTO_FISCAL` como la variable `DESC_TRATAMIENTO_FISCAL` presentan valores faltantes: faltan 27968 y 313665 valores respectivamente. El gráfico de matriz generado por la librería `missingno` muestra los valores ordenados por `ID_VENDEDOR`. Podemos ver que siempre que falta un dato en `TRATAMIENTO_FISCAL`, también falta en `DESC_TRATAMIENTO_FISCAL`, pero la recíproca no es cierta: cuando falta un dato en `DESC_TRATAMIENTO_FISCAL`, en la mayoría de los casos sí está presente el dato en `TRATAMIENTO_FISCAL`. Por otro lado, vemos que hay ocasiones donde falta el valor en `TRATAMIENTO_FISCAL`, pero aparece un valor en `TRATAMIENTO_DIFERNCIAL`. En el sentido opuesto, no hay una relación muy clara.
 
-    ![msno_matrix](figures/msno_matrix.png)
+    ![msno_matrix](figures/tp1_msno_matrix.png)
 
     Estas ideas quedan claras cuando pasamos al mapa de calor de `missingno`, el cual mide la correlación de nulidad, *i.e.* qué tan fuerte la presencia (o ausencia) de una variable afecta la presencia de otra. Las variables que están completamente llenas o completamente vacías no presentan correlación significativa, así que quedan automáticamente descartadas de la gráfica. Además, la gráfica sólo completa las correlaciones en la triangular inferior. Si bien son correlaciones débiles, la gráfica nos indica:
     * Un valor de +0.2 entre `TRATAMIENTO_FISCAL` y `DESC_TRATAMIENTO_FISCAL`: existe una baja probabilidad de que cuando falte un dato en `TRATAMIENTO_FISCAL`, también falte en `DESC_TRATAMIENTO_FISCAL`.
     * Un valor de -0.1 entre `TRATAMIENTO_FISCAL` y `TRATAMIENTO_DIFERNCIAL`: existe una (aún más) baja probabildiad de que cuando falte un dato en `TRATAMIENTO_FISCAL`, no falte en `TRATAMIENTO_DIFERNCIAL`.
     * Entre las demás variables con valores faltantes la correlación es inexistente.
 
-    ![msno_heatmap](figures/msno_heatmap.png)
+    ![msno_heatmap](figures/tp1_msno_heatmap.png)
 * Respecto a la variable `TRATAMIENTO_DIFERNCIAL`, notamos que hay vendedores a los que se le aplica simultáneamente 2 artículos (Arts. 19 y 20), siendo que hay otros a los que se les aplica estos mismos artículos, pero por separado. No hay que perder de vista esto a la hora de hacer análisis.
 * La falta de información en las variables `CM04` y `TRATAMIENTO_DIFERNCIAL` es en realidad información, ya que se trata de los complementos:
     * En el caso de `CM04` los datos faltantes corresponden a que esas operaciones no forman parte de convenios multilaterales.
@@ -131,7 +131,7 @@ Existen variables cuyos valores está expresados de manera tal que complejizan e
 
 Los diccionarios usados en los 2 últimos puntos se pueden ver en la notebook. En la siguiente figura se puede apreciar un ejemplo (y justificación) de estos cambios.
 
-![mapeo_ej](figures/mapeo_ej.png)
+![mapeo_ej](figures/tp1_mapeo_ej.png)
 
 ***Nota:*** el dataset resultante de todas estas modificaciones asignado en el DataFrame `ven_cln_map` está hosteado [aquí](https://www.dropbox.com/scl/fi/w6v59wfzkq238g5jl32ul/ven_cln_map.csv?dl=1&rlkey=mthrsum653sedc6sf0g08dx29). Cabe destacar que el dataset crudo pesaba 220 MB y este nuevo dataset pesa 31 MB.
 
@@ -154,13 +154,13 @@ A partir de esto se crean los DataFrame `ven_temp`, `ven_cat` y `ven_num`, respe
 Vemos que en la variable `Alicuota` la dispersión de los datos está en el orden de la media, tomando valores desde 0% hasta 18%. Esto se ve reflejado en un z-Score que va desde -1 a 6. Esta tendencia a tener la cola derecha más larga también se nota en las otras dos variables. Sin embargo, en estos dos últimos casos la dispersión de datos es enorme: la desviación estándar es un orden mayor que la media y el extremo superior del z-Score está en 101 y 131 para `Ventas` y `Comision`, respectivamente.
 
 Tanto `Ventas` como `Comision` tienen prácticamente un 42% de registros con valores nulos y un 0.32% de valores negativos, *i.e.* hay un 42-43% de registros con valores no positivos imputados. Por su parte, `Alicuota` no posee registros negativos, pero sí tiene un 0.64% de registros nulos. Dado el enorme peso de los valores nulos sobre el total de registros, tanto en `Ventas` como en `Comision`, se decide dividir este DataFrame en dos: uno donde se filtra por `Ventas` nulas (`ven_num_null`) y otro que contenga los registros restantes (`ven_num_not`). Al hacer esto, vemos en la siguiente figura que todos los valores de `Comision` en `ven_num_null` también son nulos, independientemente del valor de `Alicuota`, la cual sigue ocupando el rango de 0% a 18%.
-![pairplot_varnum_null](figures/pairplot_varnum_null.png)
+![pairplot_varnum_null](figures/tp1_pairplot_varnum_null.png)
 
 Por otra parte, al analizar `ven_num_not` se tiene que, aunque la asimetría de las distribuciones hacia la derehca sigue siendo bastante grande, es mucho menor de lo que era antes: el extremo superior del z-Score bajó a 77 y 101 para `Ventas` y `Comision`, respectivamente. A diferencia de `ven_num_null` donde tener una valor de venta nulo implicaba una comisión nula, en `ven_num_not` se presentan casos donde la comisión es nula a pesar de que la venta no fue nula. Esto podría estar asociado a las alícuotas nulas o a ciertos tratamientos fiscales. En los histogramas de la diagonal principal de la siguiente figura se puede apreciar la gran asimetría antes mencionada sobre la distribuciones de `Ventas` y `Comision`. Notamos admeás que `Alicuota` puede asociarse a una distribución prácticamente bimodal en torno al 0.0475% y el 5%. Vemos también que:
 * La mayoría de las ventas y comisiones están asociadas a alícuotas menores al 5%.
 * Se proyectan diferentes rectas entre `Ventas` y `Comision`: ¿existe una relación de proporcionaldiad con `Alicuota`?
 
-![pairplot_varnum_not](figures/pairplot_varnum_not.png)
+![pairplot_varnum_not](figures/tp1_pairplot_varnum_not.png)
 
 Al analizar la asimetría (skewness) y la Kurtosis sobre estas variables decimos que:
 * Todas tienen un sesgo positivo como veníamos diciendo, por lo que la cola de sus distribuciones se encuentra a derecha.
@@ -172,7 +172,7 @@ Al analizar la asimetría (skewness) y la Kurtosis sobre estas variables decimos
 Los pairplot de antes se repitieron, pero esta vez utilizando las categorías `Categoria`, `Trat_Fisc_Agg`, `Trat_Fisc`, `Trat_Dif`, `CM` y `Modelo` para etiquetarlos. Analizando primero los datos de ventas nulas, se tiene que prácticamente todos los puntos tienen un tratamiento fiscal agregado normal y no tienen tratamiento diferencial ni forman parte del convenio multilateral. Además prácticamente todos los registros pertenecen a vendedores que no son modelo.
 
 Considerando ahora las ventas no nulas, podemos decir que prácticamente todos los puntos tienen un tratamiento fiscal agregado normal, no son vendedores modelo y no tienen tratamiento diferencial. Se destaca que tanto las alícuotas como las proyecciones de las rectas se logran diferenciar según la `Categoria` (ver próxima figura). De todas maneras, un análisis más detallado (ver notebook) idica que esta relación no es tan inmediata.
-![hueCat](figures/pairplot_varnum_hueCat.png)
+![hueCat](figures/tp1_pairplot_varnum_hueCat.png)
 
 Otro dato no menor es que **todos** los registros con ventas no nulas están asociadas a vendedores que no forman parte del convenio multilateral o, en otros términos, todos los registros que sí forman parte del convenio multilateral tienen ventas nulas. 
 
@@ -203,7 +203,7 @@ La fórmula se cumple en la totalidad de registros con ventas nulas, mientras qu
     $$\text{Comision calculada} = 100 * \text{Comision real} + \$1365 = \text{Alicuota} \times \text{Ventas}$$
     $$\Rightarrow \text{Comision Real} = \frac{\text{Alicuota} \times \text{Ventas} - \$1365}{100} = 0.01 \times \text{Alicuota} \times \text{Ventas} - \$13.65 $$
 
-![hueCat](figures/comision_calv-real.png)
+![hueCat](figures/tp1_comision_calv-real.png)
 
 En la notebook se puede ver además que todos los vendedores modelo caen dentro de la recta de menor pendiente, la cual establece prácticamente una relación de proporcionalidad directa entre las ventas y la comisión de la empresa. Por su parte, los que no están clasificados como modelo caen sobre ambas rectas. ¿Podría ser este un camino para detectar la fuga?
 
@@ -223,7 +223,7 @@ Consideramos que para el análisis temporal habrá momentos en que necesitamos t
 
 Vamos a considerar que la serie temporal **principal** es la dictada por `Ventas`.
 
-![hueCat](figures/ventas.jpeg)
+![hueCat](figures/tp1_ventas.jpeg)
 
 Agrupando los datos por meses, se observa que las ventas crecen, en principio por efecto de la inflación y pareciera haber picos hacia fin de año.
 
@@ -232,6 +232,6 @@ Considerando una serie de `Ventas` para cada año, y sobreponiéndolas en el mis
 En una primera aproximación, se identifican ciertos **outiliers**, como aquellos valores de `Ventas` negativos, ceros y extremos positivos (encima del percentil 98).
 Al graficar mes a mes la cantidad de los diferentes tipos de outliers definidos, el más llamativo es el de valores negativos. Los cuales tienden a alcanzar picos en el mes de abril, de momento no habiendo explicaciones sobre este comportamiento. Podría deberse a algo relacionado al ciclo de facturación o a la liquidación de algún impuesto.
 
-![hueCat](figures/negativos.jpeg)
+![hueCat](figures/tp1_negativos.jpeg)
 
 Por último, hay correlación estadísticamente significativa para los lags 1, 2 y 3 de la variable `Ventas`, lo que implica que observaciones pasadas influyen en las observaciones actuales de la serie temporal de manera positiva.
