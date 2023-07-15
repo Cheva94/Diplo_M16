@@ -53,12 +53,45 @@ def anonimizar(df, columna:str):
     return df_map, dic
 
 
-def granularidad(dataframe, variable_objetivo, variable_granular_1, variable_granular_2=None, variable_granular_3=None, variable_granular_4=None):
+def indexar(dataframe, variable):
+    """
+    Indexa los valores de cierta variable siguiendo el IPC de Indec y tomando como base el máximo mes de la serie. 
+    Crea una nueva variable llamada variable_real y plotea un gráfico con los resultados agregados por mes.
+    
+    dataframe = dataframe
+    variable = variable a indexar
+    """
+    
+    import matplotlib.pyplot as plt
+
+    variable_real = f"{variable}_Real"
+
+    indice_base = dataframe[dataframe["Fecha"] == dataframe["Fecha"].max()]["Indice"].values[0]
+    dataframe[variable_real] = (dataframe[variable]  * indice_base / dataframe["Indice"])
+
+    dataframe_agrupado = dataframe[['Fecha', variable, variable_real]].copy()
+    dataframe_agrupado = dataframe_agrupado.groupby('Fecha').sum()[[variable, variable_real]].reset_index()
+
+    figsize=(7, 4)
+    fig, ax = plt.subplots(figsize=figsize)
+
+    ax.plot(dataframe_agrupado['Fecha'], dataframe_agrupado[variable], label=variable)
+    ax.plot(dataframe_agrupado['Fecha'], dataframe_agrupado[variable_real], label=variable_real)
+    ax.set_xlabel('Fecha')
+    ax.set_ylabel(variable)
+    ax.set_title(f"{variable} vs {variable_real}")
+    ax.legend()
+    ax.tick_params(axis='x', rotation=45)
+
+    plt.show()
+
+
+def checkear_unicidad(dataframe, variable_objetivo, variable_granular_1, variable_granular_2=None, variable_granular_3=None, variable_granular_4=None):
     """
     Verificar si existen diferentes valores de variable_objetivo para un mismo variable_granular
 
     dataframe = dataframe
-    variable_objetivo = variable sobre la cual se quiere indagar la granularidad
+    variable_objetivo = variable sobre la cual se quiere indagar la unicidad
     variable_granular_1 = variable que indica la granularidad
     variable_granular_2 = variable que, en conjunto con la variable_granular_1, indica la granularidad (es opcional)
     variable_granular_3 = variable que, en conjunto con la variable_granular_1 y la variable_granular_2, indica la granularidad (es opcional)
@@ -84,7 +117,7 @@ def granularidad(dataframe, variable_objetivo, variable_granular_1, variable_gra
         print(conteo_granular.sort_values(ascending=False))
 
 
-def graph_modelo(dataframe, variable_corte):
+def graficar_modelo(dataframe, variable_corte):
     """
     Grafica el % de vendedores modelo para cierta variable de corte
 
@@ -101,6 +134,8 @@ def graph_modelo(dataframe, variable_corte):
 
     porcentaje_modelo_1_sorted = porcentaje_modelo_1.fillna(0).sort_values(ascending=True)
 
+    cantidad = dataframe_1.fillna('Vacío').groupby(variable_corte)['Modelo'].count()
+
     plt.barh(porcentaje_modelo_1_sorted.index, porcentaje_modelo_1_sorted.values)
     plt.xlabel('Porcentaje de modelos')
     plt.ylabel(variable_corte)
@@ -111,6 +146,6 @@ def graph_modelo(dataframe, variable_corte):
     plt.legend()
 
     for i, value in enumerate(porcentaje_modelo_1_sorted.values):
-        plt.annotate(f'{value:.2f}%', (value, porcentaje_modelo_1_sorted.index[i]), ha='left', va='center')
+        plt.annotate(f'{value:.2f}% ({cantidad[porcentaje_modelo_1_sorted.index[i]]})', (value, porcentaje_modelo_1_sorted.index[i]), ha='left', va='center')
 
     plt.show()
