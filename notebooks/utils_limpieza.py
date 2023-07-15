@@ -51,3 +51,66 @@ def anonimizar(df, columna:str):
             prog += 10
 
     return df_map, dic
+
+
+def granularidad(dataframe, variable_objetivo, variable_granular_1, variable_granular_2=None, variable_granular_3=None, variable_granular_4=None):
+    """
+    Verificar si existen diferentes valores de variable_objetivo para un mismo variable_granular
+
+    dataframe = dataframe
+    variable_objetivo = variable sobre la cual se quiere indagar la granularidad
+    variable_granular_1 = variable que indica la granularidad
+    variable_granular_2 = variable que, en conjunto con la variable_granular_1, indica la granularidad (es opcional)
+    variable_granular_3 = variable que, en conjunto con la variable_granular_1 y la variable_granular_2, indica la granularidad (es opcional)
+    variable_granular_4 = variable que, en conjunto con la variable_granular_1, la variable_granular_2 y la variable_granular_3, indica la granularidad (es opcional)
+    """
+    
+    if variable_granular_1 and not variable_granular_2:
+        variable_granular = variable_granular_1
+    elif variable_granular_1 and variable_granular_2 and not variable_granular_3:
+        variable_granular = [variable_granular_1, variable_granular_2]
+    elif variable_granular_1 and variable_granular_2 and variable_granular_3 and not variable_granular_4:
+        variable_granular = [variable_granular_1, variable_granular_2, variable_granular_3]
+    else:
+        variable_granular = [variable_granular_1, variable_granular_2, variable_granular_3, variable_granular_4]
+
+    conteo = dataframe.groupby(variable_granular)[variable_objetivo].nunique().copy()
+    conteo_granular = conteo[conteo > 1]
+
+    if conteo_granular.empty:
+        print(f"Para cada {variable_granular} solo existe un valor de {variable_objetivo}.")
+    else:
+        print(f"Para algunos {variable_granular} se asignan diferentes valores de {variable_objetivo}:")
+        print(conteo_granular.sort_values(ascending=False))
+
+
+def graph_modelo(dataframe, variable_corte):
+    """
+    Grafica el % de vendedores modelo para cierta variable de corte
+
+    dataframe = dataframe
+    variable_corte = variable de corte
+    """
+    
+    import matplotlib.pyplot as plt
+
+    modelo_1 = dataframe[dataframe['Modelo'] == 1].drop_duplicates(subset=['ID', variable_corte]).copy()
+    dataframe_1 = dataframe.drop_duplicates(subset=['ID', variable_corte]).copy()
+
+    porcentaje_modelo_1 = modelo_1.fillna('Vacío').groupby(variable_corte)['Modelo'].count() / dataframe_1.fillna('Vacío').groupby(variable_corte)['Modelo'].count() * 100
+
+    porcentaje_modelo_1_sorted = porcentaje_modelo_1.fillna(0).sort_values(ascending=True)
+
+    plt.barh(porcentaje_modelo_1_sorted.index, porcentaje_modelo_1_sorted.values)
+    plt.xlabel('Porcentaje de modelos')
+    plt.ylabel(variable_corte)
+    plt.title(f'Porcentaje de vendedores modelo según {variable_corte}')
+
+    promedio_global = dataframe[dataframe['Modelo'] == 1].drop_duplicates(subset='ID').shape[0] / dataframe.drop_duplicates(subset='ID').shape[0] * 100
+    plt.axvline(promedio_global, color='red', linestyle='--', label=f'Promedio Global: {promedio_global:.2f}%')
+    plt.legend()
+
+    for i, value in enumerate(porcentaje_modelo_1_sorted.values):
+        plt.annotate(f'{value:.2f}%', (value, porcentaje_modelo_1_sorted.index[i]), ha='left', va='center')
+
+    plt.show()
