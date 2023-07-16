@@ -149,3 +149,21 @@ def graficar_modelo(dataframe, variable_corte):
         plt.annotate(f'{value:.2f}% ({cantidad[porcentaje_modelo_1_sorted.index[i]]})', (value, porcentaje_modelo_1_sorted.index[i]), ha='left', va='center')
 
     plt.show()
+    
+    
+def eliminar_combinacion_vacios(df, cols_combina=list, col_buscar_vacio=str):
+    """
+    1. Toma una combinacion de columnas> 0
+    2. Sumas la columnas que queremos verificar (ventas)
+    3. Crea un df intermedio donde guardar combinaciones donde las ventas en el tiempo estudiado son mayores que 0
+    4. hace inner join para quedarse sólo con combinaciones con valor 
+    """
+    
+    import pandas as pd
+    
+    dfc = df.copy()
+    nulos_combinacion = dfc.groupby(cols_combina)[col_buscar_vacio].sum().reset_index()
+    ventas_ok = nulos_combinacion[nulos_combinacion[col_buscar_vacio] > 0][['ID','Subrubro']].copy()
+    
+    return pd.merge(left=dfc, right=ventas_ok, how='inner', on=cols_combina, left_index=False, right_index=False, sort=False, suffixes=('_x', '_y'), copy=None, indicator=False, validate=None)
+    
