@@ -66,17 +66,17 @@ def indexar(dataframe, variable):
 
     variable_real = f"{variable}_Real"
 
-    indice_base = dataframe[dataframe["Fecha"] == dataframe["Fecha"].max()]["Indice"].values[0]
-    dataframe[variable_real] = (dataframe[variable]  * indice_base / dataframe["Indice"])
+    indice_base = dataframe[dataframe["FECHA"] == dataframe["FECHA"].max()]["INDICE"].values[0]
+    dataframe[variable_real] = (dataframe[variable]  * indice_base / dataframe["INDICE"])
 
-    dataframe_agrupado = dataframe[['Fecha', variable, variable_real]].copy()
-    dataframe_agrupado = dataframe_agrupado.groupby('Fecha').sum()[[variable, variable_real]].reset_index()
+    dataframe_agrupado = dataframe[['FECHA', variable, variable_real]].copy()
+    dataframe_agrupado = dataframe_agrupado.groupby('FECHA').sum()[[variable, variable_real]].reset_index()
 
     figsize=(7, 4)
     fig, ax = plt.subplots(figsize=figsize)
 
-    ax.plot(dataframe_agrupado['Fecha'], dataframe_agrupado[variable], label=variable)
-    ax.plot(dataframe_agrupado['Fecha'], dataframe_agrupado[variable_real], label=variable_real)
+    ax.plot(dataframe_agrupado['FECHA'], dataframe_agrupado[variable], label=variable)
+    ax.plot(dataframe_agrupado['FECHA'], dataframe_agrupado[variable_real], label=variable_real)
     ax.set_xlabel('Fecha')
     ax.set_ylabel(variable)
     ax.set_title(f"{variable} vs {variable_real}")
