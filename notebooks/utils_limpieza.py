@@ -153,10 +153,10 @@ def graficar_modelo(dataframe, variable_corte):
     
 def eliminar_combinacion_vacios(df, cols_combina=list, col_buscar_vacio=str):
     """
-    1. Toma una combinacion de columnas> 0
+    1. Toma una combinacion de columnas
     2. Sumas la columnas que queremos verificar (ventas)
     3. Crea un df intermedio donde guardar combinaciones donde las ventas en el tiempo estudiado son mayores que 0
-    4. hace inner join para quedarse sólo con combinaciones con valor 
+    4. hace inner join para quedarse sólo con combinaciones con valor > 0
     """
     
     import pandas as pd
