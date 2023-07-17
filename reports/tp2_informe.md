@@ -19,15 +19,13 @@
 > Cosas que pueden servir:
 * Respecto a las ventas (vars num):
     * Todas las ventas nulas se corresponden a comisiones nulas
-    * Existen 26 registros con ventas negativas asociadas a comisiones nulas. De éstos, 25 tienen comisión nula y uno tiene comisión del 0.18%. Como en todos los casos son ventas negativas, puede ser que esta sea la razón de tener una comisión nula. Ninguno de estos 26 registros corresponde a vendedor modelo.
+    * Existen 26 registros con ventas negativas asociadas a comisiones nulas. De éstos, 25 tienen comisión nula y uno tiene comisión del 0.18%. Como en todos los casos son ventas negativas, puede ser que esta sea la razón de tener una comisión nula. Ninguno de estos 26 registros corresponde a vendedor modelo. De hecho no hay ningún modelo con ventas negativas.
     * Hay 2232 registros con ventas positivas asociadas a comisiones nulas. De éstos:
         * 34 registros corresponden a vendedores modelo.
         * 1458 registros con alícuota nula.
         * 774 registros con alícuota no nula.
     * No hay ningún modelo con ventas nulas: la mayoría de sus registros son ventas positivas, aunque hay algunos con ventas negativas.
     * Todos los modelos tienen alícuotas bajas (muy ceranas al 0%). Hay 5374 registros asociados a vendedores modelo y sus alícuotas van desde 0.0084% hasta 3.25%. Sin embargo, la mayoría se concentra en alícuotas menores a 0.075 %, teniendo un pico en 0.05%.
-* Relación $\text{Comision} = \text{Alicuota} \times \text{Ventas}$:
-    * En las ventas negativas, el 97.65% de los registros **NO** cumplen la relación: el 96.19% de los registros la subestiman. Todos los que no cumplen caen en el caso *pendiente grande*. Ni se perciben los modelo dentro de estos registros.
 
 * Respecto a chequear unicidad (vars cat):
     * Existen vendedores modelo que participan en más de un subrubro. Si un vendedor es calificado como modelo, lo es en todos los subrubros donde aparece.
@@ -38,4 +36,24 @@
 
 * Relación entre variables fiscales: nos quedamos sólo con `Trat_Fisc`.
 
-* 
+* Serie temporal por subrubro y modelos:
+    * Modelos vs tiempo (ventas totales):
+        - Los valores de ventas de Modelo son cerca de la mitad de las ventas de no-Modelo.
+        - Durante el confinamiento obligatorio (primera mitad de 2020) las caídas en ventas fueron muy fuertes, pero más fuertes en proporción para vendedores Modelo,
+        - Si la indexación es confiable, parece que los Modelos no han recuperado sus valores de ventas previos a la Pandemia, mientas que los no-Modelo parecen estar levemente por encima.
+        - A lo largo de todo el período, los no modelo lograron vender un 14% más, mientras que los modelo han bajado sus ventas en un 10%.
+        - Hay menos dispersión de datos para vendedores no-modelo: ventas más consistentes o es simplemente un efecto de la mayor cantidad de datos?
+        - Si nos fijamos en la comisión, si bien la pandemia afectó tanto a modelos como no modelos (ver valle en el primer semestre de 2020), los modelo han recuperado su nivel de aporte, mientras que los no modelo lo han superado. A lo largo de todo el periódo la variación de los modelo es prácticamente nula, pero la de los no modelo aumentó en un 40%.
+    * Modelos vs tiempo (ventas positivas):
+        - Se repite el patrón de que los valores de ventas de Modelo son cerca de la mitad de las ventas de no-Modelo.
+        - Se sigue viendo el decaimiento en pandemia.
+        - En todo el período, las ventas de los no modelo aumentaron un 23%, mientras que las ventas de modelo apenas disminuyeron.
+        - Si nos fijamos en la comisión, se sigue viendo el efecto de la pandemia. A lo largo de todo el periódo la variación de los modelo es prácticamente nula, pero la de los no modelo aumentó en un 50%.
+    * Modelos y subrubro vs tiempo (ventas totales):
+        - Los valores de venta en Modelos son menores en todos los Subrubros, con la excepción de tres: "Góndola", "Comb." y "Comb. Ley".
+        - En los subrubros "Vehículos", "Farmacia" y "Supermercado" los valores de ventas de modelo parecen ser despreciables en comparación con no-Modelo. Tienen valores muy bajos y con muy poca variablidad.
+        - "Mantenimiento" no parece tener muchos valores Modelo, se podría descartar.
+    * Modelos y subrubro vs tiempo (ventas positivas):
+        - Los valores de venta en Modelos son menores en todos los Subrubros, con la excepción de tres: "Góndola" y "Comb.". Ahora "Comb. Ley" se pusieron cabeza a cabeza.
+        - Se repite lo de "Vehículos", "Farmacia" y "Supermercado".
+        - "Mantenimiento" no muestra ningún modelo: no hay modelos con ventas positivas en esta categoría
