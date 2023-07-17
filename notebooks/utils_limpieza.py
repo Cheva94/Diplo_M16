@@ -119,7 +119,7 @@ def checkear_unicidad(dataframe, variable_objetivo, variable_granular_1, variabl
 
 def graficar_modelo(dataframe, variable_corte):
     """
-    Grafica el % de vendedores modelo para cierta variable de corte
+    Grafica el % de vendedores modelo para cierta variable de corte (entre paréntesis expone el número total de vendedores)
 
     dataframe = dataframe
     variable_corte = variable de corte
