@@ -19,8 +19,7 @@ Generar variables que discriminen vendedores ‘modelos’ de ‘no modelos’.
 
 7. Grafique por subrubro la variación en el tiempo del Total de ventas, diferenciando modelos de no modelos.
 
-8. Genere una representación vectorial para cada contribuyente que represente el comportamiento del mismo en los últimos (periodo de tiempo a elección) (Preste atención a la estacionalidad de la serie de tiempo). Con la comisión y otro con comisiones promedio. ¿Conviene tomar los valores absolutos o relativos? Decida. Hay algunos vendedores que participan en mas de un sub rubro ¿Que hará con ellos? ¿Analizara para cada subrubro que participe? ¿Se quedara con el de mayor aporte? Decida.
-¿Que hacer con lo que tienen muchos depositos?
+8. Genere una representación vectorial para cada contribuyente que represente el comportamiento del mismo en los últimos (periodo de tiempo a elección) (Preste atención a la estacionalidad de la serie de tiempo). Con la comisión y otro con comisiones promedio. ¿Conviene tomar los valores absolutos o relativos? Decida. Hay algunos vendedores que participan en mas de un sub rubro ¿Que hará con ellos? ¿Analizara para cada subrubro que participe? ¿Se quedara con el de mayor aporte? Decida. ¿Que hacer con lo que tienen muchos depositos?
 
 9. Genere una nueva columna que represente la varianza de este vector. ¿Que información representa esta variable?
 

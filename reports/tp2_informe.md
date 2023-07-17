@@ -57,3 +57,20 @@
         - Los valores de venta en Modelos son menores en todos los Subrubros, con la excepción de tres: "Góndola" y "Comb.". Ahora "Comb. Ley" se pusieron cabeza a cabeza.
         - Se repite lo de "Vehículos", "Farmacia" y "Supermercado".
         - "Mantenimiento" no muestra ningún modelo: no hay modelos con ventas positivas en esta categoría
+
+
+
+8. Genere una representación vectorial para cada contribuyente que represente el comportamiento del mismo en los últimos (periodo de tiempo a elección) (Preste atención a la estacionalidad de la serie de tiempo). Con la comisión y otro con comisiones promedio. ¿Conviene tomar los valores absolutos o relativos? Decida. Hay algunos vendedores que participan en mas de un sub rubro ¿Que hará con ellos? ¿Analizara para cada subrubro que participe? ¿Se quedara con el de mayor aporte? Decida. ¿Que hacer con lo que tienen muchos depositos?
+
+---
+
+* El `Paso 8` es el de la generación de vectores. Dijeron que todo lo anterior lo podíamos dividir, pero que este estaría bueno hacerlo juntos. Notas de la grabación (parte 1):
+    * Se trata de generar nuevas variables que nso sirvan para después darle de comer al modelo. Los modelos usan vectores numéricos en sus predicciones.
+    * Armar sí o sí un vector con la comisión. Otro puede ser con comisiones promedio y/o con ventas. Creo que iría con comisión y con ventas.
+    * Las preguntas que están ahí son disparadoras, para ayudarnos a convertir gráficas en inforamción accionable.
+    * Ventas absolutas vs relativas: ver qué es lo que conviene. Lo de absolutas es tomar el valor tal cual está. Lo de relativas es tomar, por ejemeplo, los incrementos. Esto de los incrementos ya lo mencionó varias veces la Lu.
+    * Todas las tendencias en las series temporales son positivas, debido a que los precios siemrpe suben: inflación. Lu decia que si bien la inlación influe, es como un serrucho creciente (pendiente constante en principio). Se pueden ver cosas raras si hay picos que sobresalen de ese serrucho. La otra es ver de normalizar por inflación. ¿Pato?
+    * Volviendo a lo de los vectores. Hasta ahora el dataset que tenemos tiene registros que constan de las ventas realizadas por un vendedor en un depósito cierto mes/año. En un problema de fraudes de tarjetas de crédito lo que me importa es identificar transacciones (registros) fraudulentos. Nuestro problema es diferente: no queremos discriminar cada transacción en sospechosa o no, sino que queremos discriminar si un vendedor es sospechoso o no. Por eso necesito generar un nuevo dataset donde los registros sean los vendedores y no las transacciones: hay que hacer algún tipo de agregado sobre los datos. Este nuevo dataset será el que alimente a los modelos.
+    * Para que el modelo nos responad bien tenemos que ayudarlo y direccionarlo para que sepa a qué darle bola. Acá volvió a hablar de que es mucho más importante el tema del rubro y no así la parte fiscal. 
+    * Vendedores en más de un subrubro: creo que me quedaría con todos, ya que quedarse con el mayor, por ejemplo, no es fiable (volviendo a esto de que cada rubro maneja diferentes volúmenes de dinero).
+    * Vendedores con más de un depósito: me inclinaría por quedarme con todos sus depósitos, tomando un promedio de sus ventas en cada uno de ellos.
