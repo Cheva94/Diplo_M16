@@ -2,7 +2,7 @@
 
 ## Mentoría 16 - ¿Cómo identificar fuga de ventas? Inteligencia artificial aplicada al sector comercial.
 
-### Análisis exploratorio y curación de datos (TP2)
+### Curación (TP2)
 
 **Integrantes:**
 - Canalis, Patricio.
@@ -14,8 +14,6 @@
 - Lahoz, Nahuel
 
 ---
-# Notebook `resolucion`
+# Reporte
 
-## Tema como "Tamaño del dataset y significado de los registros"
-
-sadsdasdasdas
+> Cosas que pueden servir:
