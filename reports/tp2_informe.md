@@ -36,5 +36,6 @@
     * Para el caso de `Trat_Dif` no se presentan cambios en el atributo dentro de un mismo mes, pero sí para diferentes meses. Hay 4 categorías que no presentan vendedores modelo: artículos 16, 28, 31 y 34.
     * Un único vendedor forma parte del convenio multilateral. Sus 42 registros contienen venta nulas. Se guarda esta información en un dataset aparte y se descarta esta variable.
 
-* Relación entre variables fiscales:
-    * 
+* Relación entre variables fiscales: nos quedamos sólo con `Trat_Fisc`.
+
+* 
