@@ -66,17 +66,17 @@ def indexar(dataframe, variable):
 
     variable_real = f"{variable}_Real"
 
-    indice_base = dataframe[dataframe["FECHA"] == dataframe["FECHA"].max()]["INDICE"].values[0]
+    indice_base = dataframe[dataframe["Fecha"] == dataframe["Fecha"].max()]["INDICE"].values[0]
     dataframe[variable_real] = (dataframe[variable]  * indice_base / dataframe["INDICE"])
 
-    dataframe_agrupado = dataframe[['FECHA', variable, variable_real]].copy()
-    dataframe_agrupado = dataframe_agrupado.groupby('FECHA').sum()[[variable, variable_real]].reset_index()
+    dataframe_agrupado = dataframe[['Fecha', variable, variable_real]].copy()
+    dataframe_agrupado = dataframe_agrupado.groupby('Fecha').sum()[[variable, variable_real]].reset_index()
 
     figsize=(7, 4)
     fig, ax = plt.subplots(figsize=figsize)
 
-    ax.plot(dataframe_agrupado['FECHA'], dataframe_agrupado[variable], label=variable)
-    ax.plot(dataframe_agrupado['FECHA'], dataframe_agrupado[variable_real], label=variable_real)
+    ax.plot(dataframe_agrupado['Fecha'], dataframe_agrupado[variable], label=variable)
+    ax.plot(dataframe_agrupado['Fecha'], dataframe_agrupado[variable_real], label=variable_real)
     ax.set_xlabel('Fecha')
     ax.set_ylabel(variable)
     ax.set_title(f"{variable} vs {variable_real}")
@@ -119,7 +119,7 @@ def checkear_unicidad(dataframe, variable_objetivo, variable_granular_1, variabl
 
 def graficar_modelo(dataframe, variable_corte):
     """
-    Grafica el % de vendedores modelo para cierta variable de corte
+    Grafica el % de vendedores modelo para cierta variable de corte (entre paréntesis expone el número total de vendedores)
 
     dataframe = dataframe
     variable_corte = variable de corte
@@ -153,10 +153,10 @@ def graficar_modelo(dataframe, variable_corte):
     
 def eliminar_combinacion_vacios(df, cols_combina=list, col_buscar_vacio=str):
     """
-    1. Toma una combinacion de columnas> 0
+    1. Toma una combinacion de columnas
     2. Sumas la columnas que queremos verificar (ventas)
     3. Crea un df intermedio donde guardar combinaciones donde las ventas en el tiempo estudiado son mayores que 0
-    4. hace inner join para quedarse sólo con combinaciones con valor 
+    4. hace inner join para quedarse sólo con combinaciones con valor > 0
     """
     
     import pandas as pd
