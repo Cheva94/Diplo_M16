@@ -167,3 +167,40 @@ def eliminar_combinacion_vacios(df, cols_combina=list, col_buscar_vacio=str):
     
     return pd.merge(left=dfc, right=ventas_ok, how='inner', on=cols_combina, left_index=False, right_index=False, sort=False, suffixes=('_x', '_y'), copy=None, indicator=False, validate=None)
     
+
+def crear_diferencia_porcentual(data, variable, periodo):
+    """
+    Crea una diferencia porcentual en la variable teniendo en cuenta un periodo
+    
+    data = data
+    variable = variable sobre la cual hacer diferencia porcentual
+    periodo = periodo de tiempo sobre el cual hacer diferencia porcentual.
+              Solo puede asumir 6 valores:  1 (Monthly)
+                                            2 (Bimonthly)
+                                            3 (Quarterly)
+                                            4 (Four-monthly/Quadrimestral)
+                                            6 (Semiannual)
+                                           12 (Yearly)
+    """
+    import numpy as np
+
+    if periodo == 1:
+        prefijo = "M"
+    elif periodo == 2:
+        prefijo = "B"
+    elif periodo == 3:
+        prefijo = "Q"
+    elif periodo == 4:
+        prefijo = "F"
+    elif periodo == 6:
+        prefijo = "S"
+    elif periodo == 12:
+        prefijo = "Y"
+
+    variable_diferencia = f"{prefijo}_pct_{variable}"
+
+    data[variable_diferencia] = data.groupby(['ID', 'Subrubro'])[variable].pct_change(periods=periodo)
+
+    subset_mask = ((data[variable_diferencia] == np.inf) & (data.groupby(['ID', 'Subrubro'])['Dato_original'].shift(periodo) == 0)) | (data['Dato_original'] == 0)
+
+    data.loc[subset_mask, variable_diferencia] = np.nan
