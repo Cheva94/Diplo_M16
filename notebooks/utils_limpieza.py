@@ -204,3 +204,137 @@ def crear_diferencia_porcentual(data, variable, periodo):
     subset_mask = ((data[variable_diferencia] == np.inf) & (data.groupby(['ID', 'Subrubro'])['Dato_original'].shift(periodo) == 0)) | (data['Dato_original'] == 0)
 
     data.loc[subset_mask, variable_diferencia] = np.nan
+
+
+def graficar_var(data, sr, time):
+    """
+    Crea 4 plots de ventas y comisiones, separados según modelo y no modelo
+    
+    data = data
+    sr = subrubro
+    time = periodo de tiempo de interés
+           Solo puede asumir 2 valores: 'F' (Four-monthly/Quadrimestral)
+                                        'Y' (Yearly)
+    """
+
+    import matplotlib.pyplot as plt
+    import numpy as np
+
+    subrub = data[data['Subrubro'] == sr].copy()
+    subrub_mod = subrub[subrub['Modelo'] == 1]
+    subrub_nomod = subrub[subrub['Modelo'] == 0]
+    subrub_mod = subrub_mod.T
+    subrub_nomod = subrub_nomod.T
+
+    if time == 'F':
+        piv = np.arange('2019-05', '2022-07', dtype='datetime64[M]')
+        sub = 'Intercuatrimestral'
+        ven_mod = subrub_mod.iloc[4:42, :]
+        ven_nomod = subrub_nomod.iloc[4:42, :]
+        com_mod = subrub_mod.iloc[42:80, :]
+        com_nomod = subrub_nomod.iloc[42:80, :]
+    elif time == 'Y':
+        piv = np.arange('2020-01', '2022-07', dtype='datetime64[M]')
+        sub = 'Interanual'
+        ven_mod = subrub_mod.iloc[80:110, :]
+        ven_nomod = subrub_nomod.iloc[80:110, :]
+        com_mod = subrub_mod.iloc[110:, :]
+        com_nomod = subrub_nomod.iloc[110:, :]    
+
+    fig, axs = plt.subplots(2, 2, figsize=(50, 20))
+
+    fig.suptitle(f"{sr} - {sub}", fontsize='x-large')
+
+    ###### Ventas
+    axs[0, 0].set_ylabel(r'$\Delta$Ventas')
+    axs[0, 0].set_title(f'Modelos (n={len(subrub_mod.columns)})')
+    axs[0, 0].plot(piv, ven_mod, label=subrub_mod.columns,  marker='o')#, ls=' ')
+    axs[0, 0].set_xlabel('Fecha')
+
+    axs[0, 1].set_ylabel(r'$\Delta$Ventas')
+    axs[0, 1].set_title(f'No modelos (n={len(subrub_nomod.columns)})')
+    axs[0, 1].plot(piv, ven_nomod, label=subrub_nomod.columns, ls=' ',  marker='o')
+    axs[0, 1].set_xlabel('Fecha')
+
+    ###### Comision
+    axs[1, 0].set_ylabel(r'$\Delta$Comision')
+    axs[1, 0].set_title(f'Modelos (n={len(subrub_mod.columns)})')
+    axs[1, 0].plot(piv, com_mod, label=subrub_mod.columns,  marker='o')#, ls=' ')
+    axs[1, 0].set_xlabel('Fecha')
+
+    axs[1, 1].set_ylabel(r'$\Delta$Comision')
+    axs[1, 1].set_title(f'No modelos (n={len(subrub_nomod.columns)})')
+    axs[1, 1].plot(piv, com_nomod, label=subrub_nomod.columns, ls=' ',  marker='o')
+    axs[1, 1].set_xlabel('Fecha')
+
+    plt.show()
+
+
+def graficar_var_zoom(data, sr, time, ven_liminf=None, ven_limsup=None, com_liminf=None, com_limsup=None):
+    """
+    Crea 2 plots de ventas y comisiones no modelo (pero siguiendo los límites de los modelo)
+    
+    data = data
+    sr = subrubro
+    time = periodo de tiempo de interés
+           Solo puede asumir 2 valores: 'F' (Four-monthly/Quadrimestral)
+                                        'Y' (Yearly)
+    ven_liminf = indica el límite inferior del eje "y" para ventas (es opcional)
+    ven_limsup = indica el límite superior del eje "y" para ventas (es opcional)
+    com_liminf = indica el límite inferior del eje "y" para comision (es opcional)
+    com_limsup = indica el límite superior del eje "y" para comision (es opcional)
+    """
+
+    import matplotlib.pyplot as plt
+    import numpy as np
+
+    subrub = data[data['Subrubro'] == sr].copy()
+    subrub_mod = subrub[subrub['Modelo'] == 1]
+    subrub_nomod = subrub[subrub['Modelo'] == 0]
+    subrub_mod = subrub_mod.T
+    subrub_nomod = subrub_nomod.T
+
+    if time == 'F':
+        piv = np.arange('2019-05', '2022-07', dtype='datetime64[M]')
+        sub = 'Intercuatrimestral'
+        ven_mod = subrub_mod.iloc[4:42, :]
+        ven_nomod = subrub_nomod.iloc[4:42, :]
+        com_mod = subrub_mod.iloc[42:80, :]
+        com_nomod = subrub_nomod.iloc[42:80, :]
+    elif time == 'Y':
+        piv = np.arange('2020-01', '2022-07', dtype='datetime64[M]')
+        sub = 'Interanual'
+        ven_mod = subrub_mod.iloc[80:110, :]
+        ven_nomod = subrub_nomod.iloc[80:110, :]
+        com_mod = subrub_mod.iloc[110:, :]
+        com_nomod = subrub_nomod.iloc[110:, :]
+
+    if ven_liminf is None:
+        ven_liminf = np.min(ven_mod.min())*2
+    if ven_limsup is None:
+        ven_limsup = np.max(ven_mod.max())*2
+    if com_liminf is None:
+        com_liminf = np.min(com_mod.min())*2
+    if com_limsup is None:
+        com_limsup = np.max(com_mod.max())*2
+
+    # Hago zoom sobre el rango de los modelos, pero para los no modelo
+    fig, axs = plt.subplots(1, 2, figsize=(50, 10))
+
+    fig.suptitle(f"{sr} - {sub}", fontsize='x-large')
+
+    ###### Ventas
+    axs[0].set_ylabel(r'$\Delta$Ventas')
+    axs[0].set_title(f'No modelos (n={len(subrub_nomod.columns)})')
+    axs[0].plot(piv, ven_nomod, label=subrub_nomod.columns, ls=' ',  marker='o')
+    axs[0].set_xlabel('Fecha')
+    axs[0].set_ylim(ven_liminf, ven_limsup)
+
+    ###### Comision
+    axs[1].set_ylabel(r'$\Delta$Comision')
+    axs[1].set_title(f'No modelos (n={len(subrub_nomod.columns)})')
+    axs[1].plot(piv, com_nomod, label=subrub_nomod.columns, ls=' ',  marker='o')
+    axs[1].set_xlabel('Fecha')
+    axs[1].set_ylim(com_liminf, com_limsup)
+
+    plt.show()
