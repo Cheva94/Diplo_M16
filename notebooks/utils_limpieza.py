@@ -229,17 +229,17 @@ def graficar_var(data, sr, time):
     if time == 'F':
         piv = np.arange('2019-05', '2022-07', dtype='datetime64[M]')
         sub = 'Intercuatrimestral'
-        ven_mod = subrub_mod.iloc[4:42, :]
-        ven_nomod = subrub_nomod.iloc[4:42, :]
-        com_mod = subrub_mod.iloc[42:80, :]
-        com_nomod = subrub_nomod.iloc[42:80, :]
+        ven_mod = subrub_mod.iloc[42:80, :]
+        ven_nomod = subrub_nomod.iloc[42:80, :]
+        com_mod = subrub_mod.iloc[4:42, :]
+        com_nomod = subrub_nomod.iloc[4:42, :]
     elif time == 'Y':
         piv = np.arange('2020-01', '2022-07', dtype='datetime64[M]')
         sub = 'Interanual'
-        ven_mod = subrub_mod.iloc[80:110, :]
-        ven_nomod = subrub_nomod.iloc[80:110, :]
-        com_mod = subrub_mod.iloc[110:, :]
-        com_nomod = subrub_nomod.iloc[110:, :]    
+        ven_mod = subrub_mod.iloc[110:140, :]
+        ven_nomod = subrub_nomod.iloc[110:140, :]
+        com_mod = subrub_mod.iloc[80:110, :]
+        com_nomod = subrub_nomod.iloc[80:110, :]
 
     fig, axs = plt.subplots(2, 2, figsize=(50, 20))
 
@@ -297,26 +297,26 @@ def graficar_var_zoom(data, sr, time, ven_liminf=None, ven_limsup=None, com_limi
     if time == 'F':
         piv = np.arange('2019-05', '2022-07', dtype='datetime64[M]')
         sub = 'Intercuatrimestral'
-        ven_mod = subrub_mod.iloc[4:42, :]
-        ven_nomod = subrub_nomod.iloc[4:42, :]
-        com_mod = subrub_mod.iloc[42:80, :]
-        com_nomod = subrub_nomod.iloc[42:80, :]
+        ven_mod = subrub_mod.iloc[42:80, :]
+        ven_nomod = subrub_nomod.iloc[42:80, :]
+        com_mod = subrub_mod.iloc[4:42, :]
+        com_nomod = subrub_nomod.iloc[4:42, :]
     elif time == 'Y':
         piv = np.arange('2020-01', '2022-07', dtype='datetime64[M]')
         sub = 'Interanual'
-        ven_mod = subrub_mod.iloc[80:110, :]
-        ven_nomod = subrub_nomod.iloc[80:110, :]
-        com_mod = subrub_mod.iloc[110:, :]
-        com_nomod = subrub_nomod.iloc[110:, :]
+        ven_mod = subrub_mod.iloc[110:140, :]
+        ven_nomod = subrub_nomod.iloc[110:140, :]
+        com_mod = subrub_mod.iloc[80:110, :]
+        com_nomod = subrub_nomod.iloc[80:110, :]
 
     if ven_liminf is None:
-        ven_liminf = np.min(ven_mod.min())*2
+        ven_liminf = np.min(ven_mod.min())
     if ven_limsup is None:
-        ven_limsup = np.max(ven_mod.max())*2
+        ven_limsup = np.max(ven_mod.max())
     if com_liminf is None:
-        com_liminf = np.min(com_mod.min())*2
+        com_liminf = np.min(com_mod.min())
     if com_limsup is None:
-        com_limsup = np.max(com_mod.max())*2
+        com_limsup = np.max(com_mod.max())
 
     # Hago zoom sobre el rango de los modelos, pero para los no modelo
     fig, axs = plt.subplots(1, 2, figsize=(50, 10))
