@@ -2,7 +2,7 @@
 
 ## Mentoría 16 - ¿Cómo identificar fuga de ventas? Inteligencia artificial aplicada al sector comercial.
 
-### Curación (TP2)
+### Curación de datos (TP2)
 
 **Integrantes:**
 - Canalis, Patricio.
@@ -14,45 +14,65 @@
 - Lahoz, Nahuel
 
 ---
-# Reporte
 
-> Cosas que pueden servir:
-* Respecto a las ventas (vars num):
-    * Todas las ventas nulas se corresponden a comisiones nulas
-    * Existen 26 registros con ventas negativas asociadas a comisiones nulas. De éstos, 25 tienen comisión nula y uno tiene comisión del 0.18%. Como en todos los casos son ventas negativas, puede ser que esta sea la razón de tener una comisión nula. Ninguno de estos 26 registros corresponde a vendedor modelo. De hecho, no hay ningún modelo con ventas negativas.
-    * Hay 2232 registros con ventas positivas asociadas a comisiones nulas. De éstos:
-        * 34 registros corresponden a vendedores modelo.
-        * 1458 registros con alícuota nula.
-        * 774 registros con alícuota no nula.
-    * Todos los modelos tienen alícuotas bajas (muy ceranas al 0%). Hay 5374 registros asociados a vendedores modelo y sus alícuotas van desde 0.0084% hasta 3.25%. Sin embargo, la mayoría se concentra en alícuotas menores a 0.075 %, teniendo un pico en 0.05%.
+## Introducción
 
-* Respecto a chequear unicidad (vars cat):
-    * Existen vendedores modelo que participan en más de un subrubro. Si un vendedor es calificado como modelo, lo es en todos los subrubros donde aparece.
-    * El atributo `Trat_Fisc_Agg` **NO** es el mismo para todas los registros de un mismo vendedor. Existen vendedores que dentro de un mismo mes, venden desde el mismo depósito y dentro de un mismo subrubro, pero con más de un `Trat_Fisc_Agg`. Esto hace pensar que el tratamiento fiscal depende del cliente o de la venta en particular y no del vendedor. Se corroboró que no existe un punto de corte en `Ventas` que de lugar a estar en una u otra categoría. ¿Contradicción con el data-statement? (o mejor dicho: con la info que nos brindaron). En la categoría `Min` no hay ningún modelo (en esa categoría sólo cae 1 vendedor).
-    * Ocurre lo mismo para `Trat_Fisc`. Sólo 5 de las 15 categorías presentan vendedores modelo: `3`, `1`, `0`, `Vacío` y `Norm`.
-    * Para el caso de `Trat_Dif` no se presentan cambios en el atributo dentro de un mismo mes, pero sí para diferentes meses. Hay 4 categorías que no presentan vendedores modelo: artículos 16, 28, 31 y 34.
-    * Un único vendedor forma parte del convenio multilateral. Sus 42 registros contienen venta nulas. Se guarda esta información en un dataset aparte y se descarta esta variable.
+El objetivo de esta etapa de curación de datos es generar variables que discriminen vendedores "modelos" de "no modelos". 
 
-* Relación entre variables fiscales: nos quedamos sólo con `Trat_Fisc`.
+En esencia, la forma en que lo llevamos a cabo fue tomando información temporal explícita (ventas para cada fecha para cada vendedor) y aplicando transformaciones para poder obtener información nueva que sea comparable a otros usuarios dentro del mismo rubro. 
 
-* Serie temporal por subrubro y modelos:
-    * Modelos vs tiempo (ventas totales):
-        - Los valores de ventas de Modelo son cerca de la mitad de las ventas de no-Modelo.
-        - Durante el confinamiento obligatorio (primera mitad de 2020) las caídas en ventas fueron muy fuertes, pero más fuertes en proporción para vendedores Modelo,
-        - Si la indexación es confiable, parece que los Modelos no han recuperado sus valores de ventas previos a la Pandemia, mientas que los no-Modelo parecen estar levemente por encima.
-        - A lo largo de todo el período, los no modelo lograron vender un 14% más, mientras que los modelo han bajado sus ventas en un 10%.
-        - Hay menos dispersión de datos para vendedores no-modelo: ventas más consistentes o es simplemente un efecto de la mayor cantidad de datos?
-        - Si nos fijamos en la comisión, si bien la pandemia afectó tanto a modelos como no modelos (ver valle en el primer semestre de 2020), los modelo han recuperado su nivel de aporte, mientras que los no modelo lo han superado. A lo largo de todo el periódo la variación de los modelo es prácticamente nula, pero la de los no modelo aumentó en un 40%.
-    * Modelos vs tiempo (ventas positivas):
-        - Se repite el patrón de que los valores de ventas de Modelo son cerca de la mitad de las ventas de no-Modelo.
-        - Se sigue viendo el decaimiento en pandemia.
-        - En todo el período, las ventas de los no modelo aumentaron un 23%, mientras que las ventas de modelo apenas disminuyeron.
-        - Si nos fijamos en la comisión, se sigue viendo el efecto de la pandemia. A lo largo de todo el periódo la variación de los modelo es prácticamente nula, pero la de los no modelo aumentó en un 50%.
-    * Modelos y subrubro vs tiempo (ventas totales):
-        - Los valores de venta en Modelos son menores en todos los Subrubros, con la excepción de tres: "Góndola", "Comb." y "Comb. Ley".
-        - En los subrubros "Vehículos", "Farmacia" y "Supermercado" los valores de ventas de modelo parecen ser despreciables en comparación con no-Modelo. Tienen valores muy bajos y con muy poca variablidad.
-        - "Mantenimiento" no parece tener muchos valores Modelo, se podría descartar.
-    * Modelos y subrubro vs tiempo (ventas positivas):
-        - Los valores de venta en Modelos son menores en todos los Subrubros, con la excepción de tres: "Góndola" y "Comb.". Ahora "Comb. Ley" se pusieron cabeza a cabeza.
-        - Se repite lo de "Vehículos", "Farmacia" y "Supermercado".
-        - "Mantenimiento" no muestra ningún modelo: no hay modelos con ventas positivas en esta categoría
+Consideramos que la información de ventas totales mensuales no es muy informativa ya que no es comparable entre vendedores con distinto volumen. Por esta razón, decidimos explorar formas de generar nueva información a partir de éstas. Es necesario tener en cuenta que no todas las variables serán útiles para el objetivo de discriminar usuarios en todos los subrubros. 
+
+Durante el proceso de curación se tomaron las siguientes decisiones:
+
+- Eliminar las siguientes variables: Inscripción, Categoría, Descripción categoría, Categoría Ajustada y Nombre. La variable "Nombre" se eliminó por ser de carácter sensible. "Inscripción" se eliminó por ser redundante, y las variables referentes a la categoría se eliminaron ya que existe otra llamada "Subcategoría" (de aquí en adelante Subrubro) que aporta más información.
+- Todos aquellos subrubros sin usuario "modelo" fueron categorizados como "Otro" y posteriormente fueron eliminados sus registros.
+- Se anonimizó el identificador de vendedor para mantener los registros pero evitar tener datos sensibles en el dataset.
+- Se descartó del dataset al único vendedor con valor de 1 en el campo CM04, ya que representa el 0.01% de los casos y no es modelo.
+- Se eliminaron las variables fiscales (En primer lugar, "Descripción tratamiento fiscal" y "Tratamiento diferencial", ya que "Tratamiento fiscal" ofrece más información. En segunda instancia también se descartó esta última, por no aportar información relevante a la hora de separar Modelos).
+- Cuando un vendedor participa en distintos subrubros se toma como si fuese un vendedor distinto, por lo tanto aparecerá en otro registro.
+
+
+## Resultados
+
+El resultado principal de esta etapa de curación fue la obtención de un dataset muy parecido a lo que podría servir como datos para prácticamente cualquier modelo de aprendizaje automático. Esto quiere decir, que cada registro de este nuevo dataset representa a un solo vendedor y su comportamiento en términos de ventas en el tiempo.
+
+De forma esquemática, pasamos de un dataset que se ve como éste:
+
+| año-mes 	| subrubro 	| vendedor 	| ventas 	|
+|---------	|----------	|----------	|--------	|
+| 2022-01 	| A        	| 1        	| 42     	|
+| 2022-02 	| A        	| 1        	| 999    	|
+| 2022-03 	| A        	| 1        	| 666    	|
+| 2022-04 	| A        	| 1        	| 69     	|
+
+A un dataset que se ve como este:
+
+| subrubro 	| vendedor 	| dif_12_1 	| dif_12_2 	| ... 	| dif_12_n 	| dif_4_1 	| dif_4_2 	| ... 	| dif_4_n 	| dif_12_mean 	| dif_12_var 	| dif_4_mean 	| dif_4_var 	|
+|----------	|----------	|----------	|----------	|-----	|----------	|---------	|---------	|-----	|---------	|-------------	|------------	|------------	|-----------	|
+| A        	| 1        	| N        	| N        	| N   	| N        	| N       	| N       	| N   	| N       	| N           	| N          	| N          	| N         	|
+
+Vale la pena aclarar que al agrupar las ventas únicamente por vendedor y por subrubro estamos perdiendo la capacidad de ver diferencias en otras categorías, como "Tratamiento fiscal" o "Depósito". Sin embargo es el compromiso que estamos dispuestos a asumir por el momento, y quedará registrado. En caso de avanzar con el análisis y tener la necesidad a futuro de desagregar por estas otras variables podremos hacerlo.
+
+## Hechos estilizados
+
+* Ventas y comisiones:
+    - Durante el confinamiento obligatorio (primera mitad de 2020) las caídas fueron muy fuertes para algunos rubros.
+    - Hay menos dispersión de datos para vendedores no-modelo: parecieran ser más consistentes.
+    - Los valores de venta en Modelos son menores en todos los Subrubros, con la excepción de tres: "Góndola", "Comb." y "Comb. Ley".
+* Variación de ventas y comisiones:
+    - En promedio, en todos los rubros los modelos tienen variaciones de menor magnitud y variabilidad. Es decir, mantienen un comportamiento estable a lo largo del tiempo.
+
+
+## Trabajo a futuro
+
+El dataset que generamos tiene muchas variables fabricadas que caracterizan el comportamiento temporal de cada vendedor en cada subrubro. Sin embargo no todas estas características aportarán mucho valor "predictivo" que nos permita diferenciar entre modelos y no modelos. 
+
+Los próximos pasos que se deben seguir será por un lado: explorar nuevas variables, y por otro lado discriminar entre todas las variables generadas para conseguir combinaciones de ellas que ofrezcan la mayor información. Algunas técnicas que podríamos utilizar pordrían incluir la reducción la dimensionalidad mediante análisis de componentes principales o el uso de embeddings.
+
+Por otra parte, teniendo en cuenta que la mayor parte de los vendedores son no modelo, vamos a tener que realizar algún tratamiento para corregir ese desbalance o tenerlo en cuenta.
+
+
+## Accionables
+
+Con la información que tenemos, ya podemos comenzar a explorar diversos modelos de aprendizaje automático, supervisado o no, teniendo en cuenta que además de "modelos" y "no modelos", dentro de los "no modelos" deberíamos poder diferenciar entre vendedores con comportamiento "normal" y aquello que efectivamente representan fugas.
