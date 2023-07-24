@@ -338,3 +338,185 @@ def graficar_var_zoom(data, sr, time, ven_liminf=None, ven_limsup=None, com_limi
     axs[1].set_ylim(com_liminf, com_limsup)
 
     plt.show()
+
+
+def graficar_resumen(data, serie, medida, time):
+    """
+    Crea 1 gráfico de barras para cada subrubro separado según modelo y no modelo,
+    para una medida de resumen, una serie y un período de interés.
+    
+    data = data
+    serie = serie de interés
+            Solo puede asumir 2 valores: 'Ventas'
+                                         'Comision'
+    medida = medida de interés
+             Solo puede asumir 2 valores: 'Promedio'
+                                          'Varianza'
+    time = periodo de tiempo de interés
+           Solo puede asumir 2 valores: 'F' (Four-monthly/Quadrimestral)
+                                        'Y' (Yearly)
+    """
+
+    import matplotlib.pyplot as plt
+
+    if time == 'F':
+        if serie == 'Ventas':
+            if medida == 'Promedio':
+                variable = 'F_ven_mean'
+                periodo = 'Intercuatrimestral'	
+            elif medida == 'Varianza':
+                variable = 'F_ven_var'
+                periodo = 'Intercuatrimestral'
+        elif serie == 'Comision':
+            if medida == 'Promedio':	
+                variable = 'F_com_mean'
+                periodo = 'Intercuatrimestral'
+            elif medida == 'Varianza':	
+                variable = 'F_com_var'
+                periodo = 'Intercuatrimestral'	
+    elif time == 'Y':
+        if serie == 'Ventas':
+            if medida == 'Promedio':
+                variable = 'Y_ven_mean'
+                periodo = 'Interanual'
+            elif medida == 'Varianza':	
+                variable = 'Y_ven_var'
+                periodo = 'Interanual'	
+        elif serie == 'Comision':
+            if medida == 'Promedio':	
+                variable = 'Y_com_mean'
+                periodo = 'Interanual'
+            elif medida == 'Varianza':	
+                variable = 'Y_com_var'
+                periodo = 'Interanual'
+    
+    subrubros = data['Subrubro'].unique()
+
+    # Calcular el número de filas y columnas necesarias para el layout de 4 columnas
+    num_rows = (len(subrubros) - 1) // 6 + 1
+    num_cols = min(len(subrubros), 6)
+
+    # Crear una figura y ejes para los gráficos
+    fig, ax = plt.subplots(num_rows, num_cols, figsize=(12, 2*num_rows))
+
+    for i, subrubro in enumerate(subrubros):
+        data_subrubro = data[data['Subrubro'] == subrubro]
+        labels = ['0', '1']
+        x = range(len(labels))
+        height = data_subrubro.groupby('Modelo')[variable].mean()
+
+        # Determinar la posición del gráfico en el layout de 3 columnas
+        row = i // num_cols
+        col = i % num_cols
+
+        # Crear gráfico de barras para cada subrubro en el layout de 3 columnas
+        ax[row, col].bar(x, height, tick_label=labels)
+        ax[row, col].set_title(f'{subrubro}')
+        ax[row, col].set_xlabel('Modelo')
+        ax[row, col].set_ylabel(variable)
+
+    # Eliminar ejes vacíos si es necesario
+    for i in range(len(subrubros), num_rows * num_cols):
+        fig.delaxes(ax.flatten()[i])
+
+    # Agregar el título principal y el subtítulo
+    fig.suptitle(f"{serie} - {periodo}", fontsize=16, fontweight='bold')
+    fig.text(0.5, 0.90, f"({medida})", ha='center', fontsize=12)
+
+    plt.tight_layout()
+    plt.show()
+
+
+def graficar_mean_var(data2, variable):
+    """
+    Crea 2 gráficos de puntos (media y varianza) para cada periodo de tiempo (interanual e intercuatrimestral), 
+    para cada subrubro y separado según modelo y no modelo.
+ 
+    data2 = data
+    variable = variable de interés
+            Solo puede asumir 2 valores: 'Ventas'
+                                         'Comision'
+    """
+
+    import numpy as np
+    import matplotlib.pyplot as plt
+
+    if variable == 'Ventas':
+        Y_mean = 'Y_ven_mean'
+        Y_var = 'Y_ven_var'
+        F_mean = 'F_ven_mean'
+        F_var = 'F_ven_var'
+    elif variable == 'Comision':
+        Y_mean = 'Y_com_mean'
+        Y_var = 'Y_com_var'
+        F_mean = 'F_com_mean'
+        F_var = 'F_com_var'
+
+    subrubros = np.sort(data2["Subrubro"].unique())
+
+    # Crear una figura y un conjunto de ejes para cada gráfico
+    fig, axs = plt.subplots(len(subrubros), 2, figsize=(6, 3*len(subrubros)))
+
+    # Iterar sobre cada subrubro
+    for idx, subrubro in enumerate(subrubros):
+        # Filtrar los datos para el subrubro actual
+        data = data2[data2["Subrubro"] == subrubro].copy()
+
+        # Scatter plot para Y_ven_mean y Y_ven_var (Interanual)
+        axs[idx, 0].scatter(data[data["Modelo"] == 0][Y_mean], data[data["Modelo"] == 0][Y_var], color='grey', label='Modelo=0', alpha=0.4, s=15)
+        axs[idx, 0].scatter(data[data["Modelo"] == 1][Y_mean], data[data["Modelo"] == 1][Y_var], color='red', label='Modelo=1', alpha=1, s=15)   
+
+        # Scatter plot para F_ven_mean y F_ven_var (Intercuatrimestral)
+        axs[idx, 1].scatter(data[data["Modelo"] == 0][F_mean], data[data["Modelo"] == 0][F_var], color='grey', label='Modelo=0', alpha=0.4, s=15)
+        axs[idx, 1].scatter(data[data["Modelo"] == 1][F_mean], data[data["Modelo"] == 1][F_var], color='red', label='Modelo=1', alpha=1, s=15)   
+
+        # Calcular los percentiles para Y_ven_mean y Y_ven_var (Interanual)
+        percentil_inf_mean_y = np.percentile(data[Y_mean][~np.isnan(data[Y_mean]) & np.isfinite(data[Y_mean])], 2)
+        percentil_sup_mean_y = np.percentile(data[Y_mean][~np.isnan(data[Y_mean]) & np.isfinite(data[Y_mean])], 70)
+        percentil_inf_var_y = np.percentile(data[Y_var][~np.isnan(data[Y_var]) & np.isfinite(data[Y_var])], 2)
+        percentil_sup_var_y = np.percentile(data[Y_var][~np.isnan(data[Y_var]) & np.isfinite(data[Y_var])], 70)
+
+        # Calcular los percentiles para F_ven_mean y F_ven_var (Intercuatrimestral)
+        percentil_inf_mean_f = np.percentile(data[F_mean][~np.isnan(data[F_mean]) & np.isfinite(data[F_mean])], 2)
+        percentil_sup_mean_f = np.percentile(data[F_mean][~np.isnan(data[F_mean]) & np.isfinite(data[F_mean])], 70)
+        percentil_inf_var_f = np.percentile(data[F_var][~np.isnan(data[F_var]) & np.isfinite(data[F_var])], 2)
+        percentil_sup_var_f = np.percentile(data[F_var][~np.isnan(data[F_var]) & np.isfinite(data[F_var])], 70)
+
+        # Limitar los ejes x e y para Y_ven_mean y Y_ven_var (Interanual)
+        axs[idx, 0].set_xlim(percentil_inf_mean_y, percentil_sup_mean_y)
+        axs[idx, 0].set_ylim(percentil_inf_var_y, percentil_sup_var_y)
+
+        # Limitar los ejes x e y para F_ven_mean y F_ven_var (Intercuatrimestral)
+        axs[idx, 1].set_xlim(percentil_inf_mean_f, percentil_sup_mean_f)
+        axs[idx, 1].set_ylim(percentil_inf_var_f, percentil_sup_var_f)
+
+        # Obtener el número de vendedores Modelo=1
+        n_modelo = data[data["Modelo"] == 1]["Modelo"].count()
+
+        # Mostrar el número de vendedores Modelo=1 en el gráfico
+        axs[idx, 0].text(percentil_inf_mean_y, percentil_sup_var_y, f'#Modelos: {n_modelo}', fontsize=8, verticalalignment='top', horizontalalignment='left', bbox={'facecolor': 'none', 'edgecolor': 'none', 'alpha': 0.7, 'pad': 2})
+        axs[idx, 1].text(percentil_inf_mean_f, percentil_sup_var_f, f'#Modelos: {n_modelo}', fontsize=8, verticalalignment='top', horizontalalignment='left', bbox={'facecolor': 'none', 'edgecolor': 'none', 'alpha': 0.7, 'pad': 2})
+
+        # Establecer título del subrubro para la fila
+        axs[idx, 0].set_title(f"{subrubro} - Interanual", fontsize=10, loc="left")
+        axs[idx, 1].set_title(f"{subrubro} - Intercuatrimestral", fontsize=10, loc="left")
+
+        # Establecer subtítulo de los gráficos (columna 1: Interanual, columna 2: Intercuatrimestral)
+        axs[idx, 0].set_xlabel("Media", fontsize=8)
+        axs[idx, 0].set_ylabel("Varianza", fontsize=8)
+
+        axs[idx, 1].set_xlabel("Media", fontsize=8)
+        axs[idx, 1].set_ylabel("Varianza", fontsize=8)
+
+    # Ajustar el espaciado entre los gráficos
+    plt.tight_layout()
+
+    # Título único centrado para toda la figura
+    plt.suptitle(f"Variable {variable}", fontsize=14, fontweight='bold', y=1.02)
+    fig.text(0.5, 1.01, "(Interanual vs Intercuatrimestral)", ha='center', fontsize=12)
+    
+    # Agregar la leyenda antes de que empiecen los gráficos
+    fig.legend(loc='upper center', bbox_to_anchor=(0.5, 1.0075), fancybox=True, shadow=True, ncol=2, labels=['No modelo', 'Modelo'])
+
+    # Mostrar el gráfico
+    plt.show()
