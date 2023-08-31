@@ -1,0 +1,9 @@
+{"ID_VENDEDOR": "ID", 
+"OMEGA": "Omega", 
+"SUB-CATEGORIA": "Subrubro", 
+"TRATAMIENTO_FISCAL": "Trat_Fisc", 
+"DEPOSITO": "Deposito", 
+"TOTAL_VENTAS": "Ventas", 
+"PORCENTAJE_COMISION_EMPRESA": "Alicuota", 
+"COMISION_EMPRESA": "Comision", 
+"MODELO": "Modelo"}
