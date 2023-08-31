@@ -47,7 +47,7 @@ def anonimizar(df, columna:str):
         dic.update({str(valunico[v]): v})
 
         if v % porc10 == 0:
-            print(f'\t Progreso del {prog}%')
+            print(f'\t Progreso >> {prog}%')
             prog += 10
 
     return df_map, dic
