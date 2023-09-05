@@ -28,3 +28,6 @@
 * Clasificamos los subrubros para vendedores que participan en más de uno. En función de esto, definimos reglas para conservar, desechar o imputar registros. Se descartan todos los registros cuya decisión fue `Tirar`. Esto lleva a perder el único modelo de `Comb. Reventa`, por lo que se decide descartar este subrubro y quedarnos con los otros 10.
 * Reescaleado con `MinMaxScaler`.
 * Tests de imputación: imputar con 0 o mediante KNN. Aplicar o no un PCA de 12 componentes.
+* Estudio de la varianza explicada en cada PCA
+* Coeficiente de silueta
+* K-means con 5 clusters

@@ -55,13 +55,13 @@ def plot_silueta_lineas(X, k_min, k_max):
 
     silhouette_score_values = []
     for n_clust in n_clusters_range:
-        kmeans = KMeans(n_clusters=n_clust, n_init='auto')
-        kmeans.fit(X)
-        silhouette_score_values.append(silhouette_score(X, kmeans.labels_))
-        
-    plt.figure(figsize=(10, 6))
-    plt.plot(n_clusters_range, silhouette_score_values, marker='o')
-    plt.xlabel('Number of Clusters')
+        kmeans = KMeans(n_clusters=n_clust, n_init=10)
+        cluster_labels = kmeans.fit_predict(X)
+        silhouette_score_values.append(silhouette_score(X, cluster_labels))
+
+    plt.figure(figsize=(5, 3))
+    plt.plot(n_clusters_range, silhouette_score_values, marker='o', ls=':')
+    plt.xlabel('Cantidad de clusters')
     plt.ylabel('Score de Silueta')
     plt.title('Score de Silueta vs. Número de Clusters')
     plt.xticks(n_clusters_range)
@@ -77,13 +77,13 @@ def plot_silueta_diagram(X, k_min, k_max):
     """
     
     n_clusters_range = range(k_min, k_max+1)
-    
-    plot_num_filas = int(np.ceil((k_max+1-k_min)/2))
-    
-    plt.figure(figsize=(12, 8))
-    for i, n_clusters in enumerate(n_clusters_range, 1):
-        plt.subplot(plot_num_filas, 2, i)
-        kmeans = KMeans(n_clusters=n_clusters, n_init='auto')
+
+    fig, axs = plt.subplots(1, 4, figsize=(50, 10))
+
+    k=0
+    for n_clusters in n_clusters_range[:5]:
+
+        kmeans = KMeans(n_clusters=n_clusters, n_init=10)
         cluster_labels = kmeans.fit_predict(X)
 
         silhouette_avg = silhouette_score(X, cluster_labels)
@@ -97,16 +97,17 @@ def plot_silueta_diagram(X, k_min, k_max):
             y_upper = y_lower + size_cluster_j
 
             color = plt.cm.nipy_spectral(float(j) / n_clusters)
-            plt.fill_betweenx(np.arange(y_lower, y_upper), 0, cluster_silhouette_values, facecolor=color, alpha=0.7)
-            plt.text(-0.05, y_lower + 0.5 * size_cluster_j, str(j))
+            axs[k].fill_betweenx(np.arange(y_lower, y_upper), 0, cluster_silhouette_values, facecolor=color, alpha=0.7)
+            axs[k].text(-0.05, y_lower + 0.5 * size_cluster_j, str(j), fontsize=30)
             y_lower = y_upper + 10
 
-        plt.axvline(x=silhouette_avg, color="red", linestyle="--")
-        plt.title(f"K = {n_clusters}, Silhouette Score = {silhouette_avg:.2f}")
-        plt.xlabel("Silhouette Coefficient")
-        plt.ylabel("Cluster")
-        plt.xlim(-0.1, 1)
-        plt.ylim(0, len(X) + (n_clusters + 1) * 10)
+        axs[k].set_title(f"K = {n_clusters}, Silhouette Score = {silhouette_avg:.2f}", fontsize=30)
+        axs[k].set_xlabel("Coef. de silueta", fontsize=30)
+        axs[k].set_ylabel("ID cluster", fontsize=30)
+        axs[k].axvline(x=silhouette_avg, color="red", linestyle="--")
+        axs[k].set_yticks([])
+        axs[k].set_xlim(-0.1, 1)
+        axs[k].set_ylim(0, len(X) + (n_clusters + 1) * 10)
+        k += 1
 
-    plt.tight_layout()
     plt.show()
