@@ -26,7 +26,7 @@
     * Análisis de la serie temporal.
 * Al final hay una comparación entre los dataset pivoteados (tp2 vs tp3): medias y desviaciones estándares
 
-### **`tp3_clustering2.ipynb`** - Parte 2: Análisis e imputación de NaNs. Clusterización con k-means
+### **`tp3_clustering2.ipynb`** - Parte 2: Análisis e imputación de NaNs
 * Identificamos los datos faltantes, tanto globales como por subrubro. 
 * Clasificamos los subrubros para vendedores que participan en más de uno. En función de esto, definimos reglas para conservar, desechar o imputar registros. 
 * Se descartan todos los registros cuya decisión fue `Tirar`. Esto lleva a perder el único modelo de `Comb. Reventa`, por lo que se decide descartar este subrubro y quedarnos con los otros 10.
@@ -41,25 +41,68 @@
 * Clusterizamos usando DBSCAN con el `eps` óptimo para cada subrubro.
 
 ### **`tp3_clustering4.ipynb`** - Parte 4: Evaluación de resultados
+* ñlkñlk
 
 ---
 # Análisis de resultados
 
 ### Parte 1: Preparación y análisis de los datos
-* Análisis previo al 11: No hay cambios apreciables en estos gráficos respecto a sus equivalentes del tp2.
-* pivoteados comparados: Hablar sobre la variación de medias y SD gracias al nuevo punto que agregamos. Los datos son muchísimo menos ruidosos ahora. Sin embargo, se ve que algunos subrubros presentan una mayor variación entre el tp2 y tp3 que otros: 'Farmacia', 'Comb.', 'Vehiculos', 'Tabaco' y 'Comb. Reventa' presentan las variaciones más leves.
+Cuando hacemos el análisis detallado del dataset resultante luego de la curación y antes de ejecutar el paso 11. , vemos que no hay cambios apreciables en respecto a sus resultados equivalentes del tp2. Sin embargo, cuando comparamos los datasets pivoteados entre el tp2 y el tp3, hay una clara variación tanto en las medais como en las desviaciones estándares gracias al nuevo paso de curación realizado. Ahora los datos son muchísimo menos ruidosos y presentan rangos de variación más acotados. Algunos subrubros presentan una mayor variación entre el tp2 y tp3 que otros: 'Farmacia', 'Comb.', 'Vehiculos', 'Tabaco' y 'Comb. Reventa' presentan las variaciones más leves. 
 
-### Parte 2: Análisis e imputación de NaNs. Clusterización con k-means
-* id faltantes: Vemos que hay de todo: desde 0 datos faltantes hasta casi la totalidad de datos faltantes. Incluso hay modelos con datos faltantes, pero en muchos casos se debe a que participan en más de un subrubro.
-* Poner cómo se clasificaba y qué resultó de esto. Las reglas también.
-* Se descartan todos los registros cuya decisión fue `Tirar`. Esto lleva a perder el único modelo de `Comb. Reventa`, por lo que se decide descartar este subrubro y quedarnos con los otros 10.
-* Tests de imputación: hablar de lo que se ve.
-* Varianza explicada: porque 12 da mejor que 40.
-* Faltaría hablar de
-    * Análisis de métricas para k-means: se estudia la cantidad de clusters según el método del codo y el coeficiente de silueta.
+***Nota:*** Recordamos que la cantidad de subrubros con la que contamos es de 11: `Com. Varios`, `Comb.`. `Comb. Ley`, `Comb. Reventa`, `Farmacia`, `Gondola`, `Miscelaneo`, `Supermercados`, `Tabaco`, `Vehiculos` y `Venta Agrop.`.
+
+### Parte 2: Análisis e imputación de NaNs
+Al identificar los datos faltantes en el dataset pivoteado, vemos que hay de todo: desde 0 datos faltantes hasta casi la totalidad de datos faltantes. Incluso se presentan vendedores modelo con datos faltantes. Notamos que en muchos casos se debe a que dichos vendedores participan en más de un subrubro.
+
+Debido a esta participación de varios vendedores en más de un subrubro, tanto modelos como no modelo, se decidió clasificar su participación de la siguiente manera:
+* Se asigna que el subrubro es **Primario** cuando
+    * Es el único en el que participa.
+    * Es el que tiene la menor cantidad de valores faltantes cuando participa en más de uno. Si la cantidad de faltantes es la misma en dos o más de los subrubros que participa, se define como **Primario** aquel con mayor volumen de ventas.
+* Se asigna que el subrubro es **Secundario** cuando no satisface lo recién dicho.
+
+Estas decisiones se asignan a una nueva variable: `Tipo_subrubro`.
+
+Posteriormente, se consideraron en conjunto las variables `Tipo_subrubro`, `Modelo` y `Vacios`, la cual cuenta la cantidad de datos faltantes, para establecer una decisión: `No hacer nada`, `Imputar` o `Tirar`. El sistema de decisiones funciona de la siguiente manera:
+
+| Modelo | Tipo_subrubro | Vacíos         | Decisión       |
+|--------|---------------|----------------|----------------|
+| 1      | Primario      | 0              | No hacer nada  |
+| 1      | Primario      | Hasta 68 (50%) | Imputar        |
+| 1      | Primario      | Más de 68      | Tirar          |
+| 1      | Secundario    | 0              | No hacer nada  |
+| 1      | Secundario    | Hasta 34 (25%) | Imputar        |
+| 1      | Secundario    | Más de 34      | Tirar          |
+| 0      | Primario      | 0              | No hacer nada  |
+| 0      | Primario      | Hasta 14 (10%) | Imputar        |
+| 0      | Primario      | Más de 14      | Tirar          |
+| 0      | Secundario    | 0              | No hacer nada  |
+| 0      | Secundario    | Hasta 7 (5%)   | Imputar        |
+| 0      | Secundario    | Más de 7       | Tirar          |
+
+***Nota:*** a modo de referencia son 136 las variables que contienen la variación porcentual.
+
+Se procede a descartar todos aquellos registros que fueron asignados con `Decision` = `Tirar`. Luego de esto nos quedamos con:
+* 3180 registros >> 30% menos.
+* 46 vendedores únicos modelo >> 15% menos.
+* 1 subrubro menos >> descartamos el subrubro `Comb. Reventa` ya que tenía un único vendedor modelo, pero el mismo fue descartado al tener 70 valores faltantes. Se analizó la posibilidad de combinar los subrubros asociados al combustible, pero tenía comportamientos disímiles entre sí.
+
+Dentro de los registros asociados a los 10 subrubros restantes, aún se tienen valores faltantes. Se evalúa entonces el efecto de imputar con un valor constante de 0 o utilizando KNN con $k=5$. En cada caso se realiza además un PCA con 12 componentes. Para cada una de estas 4 situaciones (sólo imputar con 0, imputar con 0 y hacer PCA de 12 componentes, sólo imputar con KNN, e imputar con KNN y hacer PCA de 12 componentes) se calculó la inercia. En la siguiente figura vemos comparadas las inercias resultantes para las 4 situaciones. Si bien no se ve un codo bien definido, no pudiendo utilizar el método del codo para seleccionar una cantidad adecuada de clusters, observamos que la menor inercia se obtiene cuando se imputa con KNN y además se hace una reducción con PCA para quedarnos con las 12 componentes principales. Esto es un indicio de que esta es la mejor opción dentro de las 4 planteadas.
+
+![codo4](figures/tp3_codo4.png)
+
+Respecto a la varianza, en la siguiente figura se muestra a modo de ejemplo los resultados obtenidos para la imputación con KNN y posterior uso de PCA sobre el total de variables disponibles. Vemos que, salvo para `Tabaco` que cumple casi con el 100%, la varianza explicada con 12 componentes es bastante pobre: va entre el 50 y el 75%. Sin embargo, al probar PCA con 40 componentes para asegurarnos de tener al menos el 80% de la varianza explicada en todos los subrubros, esto resulta en una clusterización aún más pobre: la inercia de este proceso es equivalente a la inercia obtenida cuando sólo se imputaba con 0. Esto se puede entender pensando en que el valor de 12 se adecua más a un proceso temporal (asociándolo a un año), mientras que con 40 comenzamos a conservar demasiado ruido. Esto último se puede observar al considerar las alturas de las barras en los histogramas de la figura.
+
+![codo4](figures/tp3_varexp.png)
+
+Como el método del codo no nos sirve como métrica para decidir cuántos clusters utilizar, se probó el coeficiente de silueta. Determinamos primero el valor promedio del coeficiente de silueta para cada subrubro. En términos generales, los mejores puntajes se obtienen usando entre 2 y 5 clusters. En función de esto, analizamos los diagramas de silueta para cada subrubro, tomando de 2 a 5 clusters. Lo primero que salta a la vista es que todos los subrubros están sumamnete desbalanceados: la gran mayoría de los datos cae dentro de un cluster, y los demás clusters están conformados por una cantidad muy pequeña de datos. Además, hay muchos casos que presentan scores negativos, indicando una mala asignación del cluster. Finalmente, en todos los casos se presentan clusters que se ubican por debajo del valor promedio del coeficiente de silueta (líneas punteadas rojas), lo cual indica que dichas clusterizaciones no son buenas. Esto se puede ver en el siguiente ejemplo, donde se ven los resultados para `Comb. Ley`.
+
+![codo4](figures/tp3_silueta.png)
 
 ### Parte 3: Clusterización con K-means y DBSCAN
 * Faltaría hablar de que se prueba una clusterización con K-means con los coeficientes óptimos encontrados.
+
+Todo esto es indicio de que no nos será útil clusterizar usando k-means. Debemos recurrir a otro tipo de modelado.
+
 * Faltaría hablar de dbscan.
 
 ### Parte 4: Evaluación de resultados
