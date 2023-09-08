@@ -33,16 +33,15 @@
 * Tests de imputación: se imputa con ceros o mediante KNN. Luego se reescalea con `MinMaxScaler`. Finalmente se prueba aplicando un PCA de 12 componentes y de 40 componentes.
 * Se hace un estudio de la varianza explicada de PCA para cada caso.
 * Análisis de métricas para k-means: se estudia la cantidad de clusters según el método del codo y el coeficiente de silueta.
-* Se prueba una clusterización con K-means con los coeficientes óptimos encontrados.
 
-### **`tp3_clustering3.ipynb`** - Parte 3: Clusterización con DBSCAN.
-* 
+
+### **`tp3_clustering3.ipynb`** - Parte 3: Clusterización con K-means y DBSCAN.
+* Se prueba una clusterización con K-means con los coeficientes óptimos encontrados.
 
 ### **`tp3_clustering4.ipynb`** - Parte 4: Evaluación de resultados.
 
-
 ---
-# Análisis
+# Análisis de resultados
 
 parte1 (ya corrido y listo):
 * Análisis previo al 11: No hay cambios apreciables en estos gráficos respecto a sus equivalentes del tp2.
@@ -56,7 +55,13 @@ parte2 (ya corrido y listo):
 * Varianza explicada: porque 12 da mejor que 40.
 * Faltaría hablar de
     * Análisis de métricas para k-means: se estudia la cantidad de clusters según el método del codo y el coeficiente de silueta.
-    * Se prueba una clusterización con K-means con los coeficientes óptimos encontrados.
 
 parte3 (ya corrido y listo):
-* 
+* Faltaría hablar de que se prueba una clusterización con K-means con los coeficientes óptimos encontrados.
+* Faltaría hablar de dbscan.
+
+---
+# Conclusiones
+
+---
+# Accionables
