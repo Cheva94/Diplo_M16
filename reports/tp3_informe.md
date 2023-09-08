@@ -112,35 +112,38 @@ Para clusterizar utilizando DBSCAN, primero determinamos el `eps` óptimo para c
 
 ![codo4](figures/tp3_dbscan_Miscelaneo.png)
 
-Este patrón se repite para todos los subrubros, salvo para el caso de `Tabaco`, donde no se encuentra ningún outlier: este rubro consta de 22 vendedores únicos, donde los datos están muy dispersos.
+Observamos entonces que DBSCAN es más útil ya que no requiere de una intervención humana. Los resultados de este modelo para cada subrubro se tabulan a continuación. Las variables son:
+* $N_{tot}$ >> cantidad total de vendedores únicos presentes en dicho subrubro.
+* $N_{mod}$ >> cantidad total de vendedores modelo presentes en dicho subrubro.
+* $R_{mod}$ >> proporción de vendedores modelo en dicho subrubro.
+    $$R_{mod} = \frac{N_{mod}}{N_{tot}} * 100$$
+* $\epsilon$ >> parámetro `eps` para DBSCAN en dicho subrubro.
+* $N_{min}$ >> parámetro `min_samples` para DBSCAN en dicho subrubro.
+* $N_{out}$ >> cantidad total de vendedores outliers encontrados en dicho subrubro.
+* $R_{out}$ >> proporción de vendedores outliers en dicho subrubro.
+    $$R_{out} = \frac{N_{out}}{N_{tot}} * 100$$
+
+|    Subrubro    | $N_{tot}$ | $N_{mod}$ | $R_{mod}$ |  $\epsilon$ | $N_{min}$ | $N_{out}$ | $R_{out}$ |
+|----------------|-----------|-----------|-----------|-------------|-----------|-----------|-----------|
+| Com. Varios    |    301    |     4     |   1.33 %  |     0.30    |     23    |     29    |   9.63 %  |
+| Comb.          |    189    |     6     |   3.17 %  |     0.25    |     23    |     15    |   7.94 %  |
+| Comb. Ley      |    195    |     3     |   1.54 %  |     0.60    |     23    |      5    |   2.56 %  |
+| Farmacia       |    173    |     4     |   2.31 %  |     0.40    |     23    |     16    |   9.25 %  |
+| Gondola        |    409    |     3     |   0.73 %  |     0.25    |     23    |     22    |   5.38 %  |
+| Miscelaneo     |   1240    |    20     |   1.61 %  |     0.15    |     23    |     70    |   5.65 %  |
+| Supermercados  |    136    |     2     |   1.47 %  |     0.35    |     23    |     18    |  13.24 %  |
+| Tabaco         |     22    |     2     |   9.09 %  |     0.70    |     11    |      7    |  31.82 %  |
+| Vehiculos      |    221    |     1     |   0.45 %  |     0.30    |     23    |     18    |   8.14 %  |
+| Venta Agrop.   |    249    |     1     |   0.40 %  |     0.40    |     23    |     17    |   6.83 %  |
+
+Esto es sobre un total de 3135 vendedores únicos con 46 modelos (1.47 % del total), dando un total de 217 outliers (6.92 % del total). En la siguiente figura se observa el clustering para `Tabaco`. Teniendo en cuenta esto junto a los resultados de la tabla, concluimos que necesitamos más datos para poder establecer un modelo útil para este subrubro.
 
 ![codo4](figures/tp3_dbscan_Tabaco.png)
-
-Observamos entonces que DBSCAN es más útil ya que no requiere de una intervención humana. Los resultados de este modelo para cada subrubro se tabulan a continuación. El valor de $N$ es la cantidad de vendedores únicos presentes en dicho subrubro, mientras que $R$ es la proporción de outliers.
-    $$R = \frac{outliers}{N} * 100$$
-
-|    Subrubro    |   N  | eps  | min_samples | outliers |    R    |
-|----------------|------|------|-------------|----------|---------|
-| Com. Varios    |  301 | 0.30 |      23     |    29    |  9.63 % |
-| Comb.          |  189 | 0.25 |      23     |    15    |  7.94 % |
-| Comb. Ley      |------|------|-------------|----------|---------|
-| Farmacia       |  173 | 0.40 |      23     |    16    |  9.25 % |
-| Gondola        |  409 | 0.25 |      23     |    22    |  5.38 % |
-| Miscelaneo     | 1240 | 0.15 |      23     |    70    |  5.64 % |
-| Supermercados  |  136 | 0.35 |      23     |    18    | 13.24 % |
-| Tabaco         |   22 | 0.70 |      11     |     7    | 31.82 % |
-| Vehiculos      |  221 | 0.30 |      23     |    18    |  8.14 % |
-| Venta Agrop.   |  249 | 0.40 |      23     |    17    |  6.83 % |
 
 ### Parte 4: Evaluación de resultados
 * sdasda
 
 ---
-# Conclusiones
+# Conclusiones: accionables
 
 asdasdasda
-
----
-# Accionables
-
-asdasdas
