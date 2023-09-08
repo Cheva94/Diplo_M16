@@ -35,7 +35,8 @@
 * Análisis de métricas para k-means: se estudia la cantidad de clusters según el método del codo y el coeficiente de silueta.
 * Se prueba una clusterización con K-means con los coeficientes óptimos encontrados.
 
-### **`tp3_clustering3.ipynb`** - Parte 3: 
+### **`tp3_clustering3.ipynb`** - Parte 3: Clusterización con DBSCAN.
+* 
 
 ### **`tp3_clustering4.ipynb`** - Parte 4: 
 
