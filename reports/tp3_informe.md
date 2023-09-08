@@ -26,7 +26,7 @@
     * Análisis de la serie temporal.
 * Al final hay una comparación entre los dataset pivoteados (tp2 vs tp3): medias y desviaciones estándares
 
-### **`tp3_clustering2.ipynb`** - Parte 2: Análisis e imputación de NaNs. Clusterización con k-means.
+### **`tp3_clustering2.ipynb`** - Parte 2: Análisis e imputación de NaNs. Clusterización con k-means
 * Identificamos los datos faltantes, tanto globales como por subrubro. 
 * Clasificamos los subrubros para vendedores que participan en más de uno. En función de esto, definimos reglas para conservar, desechar o imputar registros. 
 * Se descartan todos los registros cuya decisión fue `Tirar`. Esto lleva a perder el único modelo de `Comb. Reventa`, por lo que se decide descartar este subrubro y quedarnos con los otros 10.
@@ -35,19 +35,21 @@
 * Análisis de métricas para k-means: se estudia la cantidad de clusters según el método del codo y el coeficiente de silueta.
 
 
-### **`tp3_clustering3.ipynb`** - Parte 3: Clusterización con K-means y DBSCAN.
-* Se prueba una clusterización con K-means con los coeficientes óptimos encontrados.
+### **`tp3_clustering3.ipynb`** - Parte 3: Clusterización con K-means y DBSCAN
+* Clusterizamos con K-means usando $K=5$ y luego grafiamos usando un PCA de 2 componentes.
+* Determinamos el `eps` óptimo por subrubro para usar en DBSCAN.
+* Clusterizamos usando DBSCAN con el `eps` óptimo para cada subrubro.
 
-### **`tp3_clustering4.ipynb`** - Parte 4: Evaluación de resultados.
+### **`tp3_clustering4.ipynb`** - Parte 4: Evaluación de resultados
 
 ---
 # Análisis de resultados
 
-parte1 (ya corrido y listo):
+### Parte 1: Preparación y análisis de los datos
 * Análisis previo al 11: No hay cambios apreciables en estos gráficos respecto a sus equivalentes del tp2.
 * pivoteados comparados: Hablar sobre la variación de medias y SD gracias al nuevo punto que agregamos. Los datos son muchísimo menos ruidosos ahora. Sin embargo, se ve que algunos subrubros presentan una mayor variación entre el tp2 y tp3 que otros: 'Farmacia', 'Comb.', 'Vehiculos', 'Tabaco' y 'Comb. Reventa' presentan las variaciones más leves.
 
-parte2 (ya corrido y listo):
+### Parte 2: Análisis e imputación de NaNs. Clusterización con k-means
 * id faltantes: Vemos que hay de todo: desde 0 datos faltantes hasta casi la totalidad de datos faltantes. Incluso hay modelos con datos faltantes, pero en muchos casos se debe a que participan en más de un subrubro.
 * Poner cómo se clasificaba y qué resultó de esto. Las reglas también.
 * Se descartan todos los registros cuya decisión fue `Tirar`. Esto lleva a perder el único modelo de `Comb. Reventa`, por lo que se decide descartar este subrubro y quedarnos con los otros 10.
@@ -56,12 +58,19 @@ parte2 (ya corrido y listo):
 * Faltaría hablar de
     * Análisis de métricas para k-means: se estudia la cantidad de clusters según el método del codo y el coeficiente de silueta.
 
-parte3 (ya corrido y listo):
+### Parte 3: Clusterización con K-means y DBSCAN
 * Faltaría hablar de que se prueba una clusterización con K-means con los coeficientes óptimos encontrados.
 * Faltaría hablar de dbscan.
+
+### Parte 4: Evaluación de resultados
+* sdasda
 
 ---
 # Conclusiones
 
+asdasdasda
+
 ---
 # Accionables
+
+asdasdas
