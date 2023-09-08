@@ -38,7 +38,7 @@
 ### **`tp3_clustering3.ipynb`** - Parte 3: Clusterización con DBSCAN.
 * 
 
-### **`tp3_clustering4.ipynb`** - Parte 4: 
+### **`tp3_clustering4.ipynb`** - Parte 4: Evaluación de resultados.
 
 
 ---
@@ -47,7 +47,6 @@
 parte1 (ya corrido y listo):
 * Análisis previo al 11: No hay cambios apreciables en estos gráficos respecto a sus equivalentes del tp2.
 * pivoteados comparados: Hablar sobre la variación de medias y SD gracias al nuevo punto que agregamos. Los datos son muchísimo menos ruidosos ahora. Sin embargo, se ve que algunos subrubros presentan una mayor variación entre el tp2 y tp3 que otros: 'Farmacia', 'Comb.', 'Vehiculos', 'Tabaco' y 'Comb. Reventa' presentan las variaciones más leves.
-
 
 parte2 (ya corrido y listo):
 * id faltantes: Vemos que hay de todo: desde 0 datos faltantes hasta casi la totalidad de datos faltantes. Incluso hay modelos con datos faltantes, pero en muchos casos se debe a que participan en más de un subrubro.
@@ -58,3 +57,6 @@ parte2 (ya corrido y listo):
 * Faltaría hablar de
     * Análisis de métricas para k-means: se estudia la cantidad de clusters según el método del codo y el coeficiente de silueta.
     * Se prueba una clusterización con K-means con los coeficientes óptimos encontrados.
+
+parte3 (ya corrido y listo):
+* 
