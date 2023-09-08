@@ -94,16 +94,43 @@ Respecto a la varianza, en la siguiente figura se muestra a modo de ejemplo los 
 
 ![codo4](figures/tp3_varexp.png)
 
-Como el método del codo no nos sirve como métrica para decidir cuántos clusters utilizar, se probó el coeficiente de silueta. Determinamos primero el valor promedio del coeficiente de silueta para cada subrubro. En términos generales, los mejores puntajes se obtienen usando entre 2 y 5 clusters. En función de esto, analizamos los diagramas de silueta para cada subrubro, tomando de 2 a 5 clusters. Lo primero que salta a la vista es que todos los subrubros están sumamnete desbalanceados: la gran mayoría de los datos cae dentro de un cluster, y los demás clusters están conformados por una cantidad muy pequeña de datos. Además, hay muchos casos que presentan scores negativos, indicando una mala asignación del cluster. Finalmente, en todos los casos se presentan clusters que se ubican por debajo del valor promedio del coeficiente de silueta (líneas punteadas rojas), lo cual indica que dichas clusterizaciones no son buenas. Esto se puede ver en el siguiente ejemplo, donde se ven los resultados para `Comb. Ley`.
+Como el método del codo no nos sirve como métrica para decidir cuántos clusters utilizar, se probó el coeficiente de silueta. Determinamos primero el valor promedio del coeficiente de silueta para cada subrubro. En términos generales, los mejores puntajes se obtienen usando entre 2 y 5 clusters. En función de esto, analizamos los diagramas de silueta para cada subrubro, tomando de 2 a 5 clusters. Lo primero que salta a la vista es que todos los subrubros están sumamnete desbalanceados: la gran mayoría de los datos cae dentro de un cluster, y los demás clusters están conformados por una cantidad muy pequeña de datos. Además, hay muchos casos que presentan scores negativos, indicando una mala asignación del cluster. Finalmente, en todos los casos se presentan clusters que se ubican por debajo del valor promedio del coeficiente de silueta (líneas punteadas rojas), lo cual indica en principio que dichas clusterizaciones no son buenas. Esto se puede ver en el siguiente ejemplo, donde se ven los resultados para `Comb. Ley`.
 
 ![codo4](figures/tp3_silueta.png)
 
+A pesar de todo esto, los resultados tienen sentido si los enmarcamos en nuestro problema: el comportamiento fraudulento es raro y poco habitual, dando lugar a dataset extremadamente desbalanceados donde se presenta un grupo preponderante por sobre el resto.
+
 ### Parte 3: Clusterización con K-means y DBSCAN
-* Faltaría hablar de que se prueba una clusterización con K-means con los coeficientes óptimos encontrados.
 
-Todo esto es indicio de que no nos será útil clusterizar usando k-means. Debemos recurrir a otro tipo de modelado.
+Primero clusterizamos con K-means usando $K=5$ y, luego, grafiamos usando un PCA de 2 componentes. A modo de ejemplo, veamos el resultado para `Miscelaneo`. Vemos que todos los modelos (estrellas) pertenecen únicamente al cluster 1 (azul) y la mayor densidad de puntos se da en torno a éstos. Notamos que, al forzar 5 clusters, el algoritmo nos puede estar separando datos que en realidad no deberían separarse. Se pondría plantear que los clusters 1 y 3 (azul y violeta) son en realidad el mismo cluster. Incluso podría incluirse el cluster 0 (rojo), quedando como cluster outliers el 2 y 4 (verde y naranja). 
 
-* Faltaría hablar de dbscan.
+![codo4](figures/tp3_kmeans_misc.png)
+
+Este patrón se repite para todos los subrubros. No consideramos que K-means sea el modelo adecuado debido a la necesidad de una intervención humana post clusterizado para realizar una inspección visual y determinar manualmente qué conjunto de clusters consideramos indicadores de buen comportamiento y cuáles son outliers, *i.e.* debemos marcarlos y evaluarlos. Por este motivo, probamos con DBSCAN. 
+
+Para clusterizar utilizando DBSCAN, primero determinamos el `eps` óptimo para cada subrubro, utilizando una regla análoga al método del codo. Obtenidos estos valores, se procede a clusterizar con DBSCAN y, luego, grafiamos usando un PCA de 2 componentes. A modo comparativo, se muestra el resultado obtenido para `Miscelaneo`. Vemos ahora que volvemos a tener una región densa y puntos dispersos. Además, se forma un único cluster, el cual contiene a los modelo. Aquellos puntos que no pertenecen a este cluster son outliers. 
+
+![codo4](figures/tp3_dbscan_Miscelaneo.png)
+
+Este patrón se repite para todos los subrubros, salvo para el caso de `Tabaco`, donde no se encuentra ningún outlier: este rubro consta de 22 vendedores únicos, donde los datos están muy dispersos.
+
+![codo4](figures/tp3_dbscan_Tabaco.png)
+
+Observamos entonces que DBSCAN es más útil ya que no requiere de una intervención humana. Los resultados de este modelo para cada subrubro se tabulan a continuación. El valor de $N$ es la cantidad de vendedores únicos presentes en dicho subrubro, mientras que $R$ es la proporción de outliers.
+    $$R = \frac{outliers}{N} * 100$$
+
+|    Subrubro    |   N  | eps  | min_samples | outliers |    R    |
+|----------------|------|------|-------------|----------|---------|
+| Com. Varios    |  301 | 0.30 |      23     |    29    |  9.63 % |
+| Comb.          |  189 | 0.25 |      23     |    15    |  7.94 % |
+| Comb. Ley      |------|------|-------------|----------|---------|
+| Farmacia       |  173 | 0.40 |      23     |    16    |  9.25 % |
+| Gondola        |  409 | 0.25 |      23     |    22    |  5.38 % |
+| Miscelaneo     | 1240 | 0.15 |      23     |    70    |  5.64 % |
+| Supermercados  |  136 | 0.35 |      23     |    18    | 13.24 % |
+| Tabaco         |   22 | 0.70 |      11     |     7    | 31.82 % |
+| Vehiculos      |  221 | 0.30 |      23     |    18    |  8.14 % |
+| Venta Agrop.   |  249 | 0.40 |      23     |    17    |  6.83 % |
 
 ### Parte 4: Evaluación de resultados
 * sdasda
