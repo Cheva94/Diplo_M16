@@ -175,6 +175,10 @@ Posteriormente se evalúa la consistencia de la variable Modelo. Es decir, si se
 
 Salvo para el caso de `Supermercados`, se observa que los `Modelo` son más parecidos a los vendedores del `Cluster 0`, antes que al `Cluster -1`. Y en las variables de Comisión se observa más clara la diferencia, siendo que ésto se corresponde con la ganancia real de la empresa.
 
+La siguiente pregunta que surgió fue saber si un vendedor que estaba clasificado como outlier en cierto subrubro, también era outlier en los demás subrubros a los que pertenecía. Vemos que poco más del 50% de dichos vendedores participa en más de un subrubro y las situaciones son de lo más diversas: hay quienes son outliers en todos sus subrubros, mientras que otros son outliers en alguno o sólo 1 subrubro.
+
+![modelos](figures/tp3_out_multiplesSubrubros.png)
+
 Por último se enfoca el análisis en los vendedores que pertenecen al `Cluster -1`, para determinar qué interés tienen esos vendedores para la empresa y su potencial impacto. En particular, vamos a segmentar al cluster en diferentes partes según los montos de Ventas que generan. En la siguiente figura, la distribución (naranja) es aquella generada por los vendedores etiquetados como outliers para cada subrubro, mientras que las rectas verticales (azul, verde y rojo) marcan los cuartiles para la distribución global del subrubro, *i.e.* consideran tanto Cluster -1 como Cluster 0.
 
 ![densidad](figures/tp3_densidad_comvarios.png)
@@ -193,4 +197,10 @@ En total para todos los subrubros se tiene:
 ---
 # Conclusiones: accionables
 
-asdasdasda
+Luego de un exahustivo análisis de los datos, incluyendo su curación y tratramiento, concluimos lo siguiente:
+* Se logró segmentar a los vendedores en función de su comportamiento dentro de la plataforma de compra-venta online, logrando así detectar a aquellos que tienen un comportamiento potencialmente fraudulento.
+* Esta segmentación fue efectiva en 9 subrubros: `Com. Varios`, `Comb.`, `Comb. Ley`, `Farmacia`, `Gondola`, `Miscelaneo`, `Supermercados`, `Vehiculos` y `Venta Agrop.`.
+* Existe vendedores que han sido clasificados como fraudes en un subrubro, pero no así en los otros subrubros en los que participa.
+* Las mayores diferencias entre aquellso etiquetados como fraudes y aquellos que no se observa en las comisiones, repercutiendo directamente en las ganancias de la empresa.
+
+Finalmente, se hizo un ranking de impacto para cada uno de los subrubros con aquellos vendedores que fueron etiquetados como potenciales fraudes, permitiendo disernir entre aquellos que serían menos problemáticos para le empresa de aquellos que serían más problemáticos. Se entrega este ranking junto a los respectivos `ID` de los vendedores para que la empresa pueda tomar decisiones acorde a esta información.
