@@ -19,12 +19,12 @@
 ### **Estructura:**
 
 ```
-├── README.md          <- The top-level README for developers using this project.
+├── README.md          
 ├── data
+│   ├── raw            <- Datos original y crudos.
 │   ├── external       <- Data from third party sources.
 │   ├── interim        <- Intermediate data that has been transformed.
-│   ├── processed      <- The final, canonical data sets for modeling.
-│   └── raw            <- The original, immutable data dump.
+│   └── processed      <- The final, canonical data sets for modeling.
 │
 ├── docs               <- A default Sphinx project; see sphinx-doc.org for details
 │
@@ -37,3 +37,5 @@
 ├── reports            <- Generated analysis as HTML, PDF, LaTeX, etc.
 │   └── figures        <- Generated graphics and figures to be used in reporting
 ```
+
+[originales](https://drive.google.com/file/d/1RASbLWhOXv4Pa2JsbDVuuCAVrjfJWYDO/view?usp=sharing)
