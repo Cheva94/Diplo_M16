@@ -32,27 +32,31 @@
 * Se descartan todos los registros cuya decisión fue `Tirar`. Esto lleva a perder el único modelo de `Comb. Reventa`, por lo que se decide descartar este subrubro y quedarnos con los otros 10.
 * Tests de imputación: se imputa con ceros o mediante KNN. Luego se reescalea con `MinMaxScaler`. Finalmente se prueba aplicando un PCA de 12 componentes y de 40 componentes.
 * Se hace un estudio de la varianza explicada de PCA para cada caso.
-* Análisis de métricas para k-means: se estudia la cantidad de clusters según el método del codo y el coeficiente de silueta.
+* Análisis de métricas para K-means: se estudia la cantidad de clusters según el método del codo y el coeficiente de silueta.
 
 
 ### **`tp3_clustering3.ipynb`** - Parte 3: Clusterización con K-means y DBSCAN
-* Clusterizamos con K-means usando $K=5$ y luego grafiamos usando un PCA de 2 componentes.
+* Clusterizamos con K-means usando $K=5$ y luego graficamos usando un PCA de 2 componentes.
 * Determinamos el `eps` óptimo por subrubro para usar en DBSCAN.
 * Clusterizamos usando DBSCAN con el `eps` óptimo para cada subrubro.
 
 ### **`tp3_clustering4.ipynb`** - Parte 4: Evaluación de resultados
-* ñlkñlk
+* Al dataframe sobre el cual se realizó el clustering se le traen variables de interés como el promedio de ventas y comisiones y cantidad datos faltantes desde el dataset original. Y las columnas de variaciones porcentuales (para ventas/comisiones e intercuatrimestrales/interanuales).
+* Se exploran las características distintivas de los dos clusters resultantes.
+* Se evalúa la clusterización comparando contra las clases predefinidas de modelos.
+* Se evalúa la consistencia en el armado de la variable modelo por parte del equipo de expertos de la empresa, para observar si coinciden con los datos.
+* Se segmenta el grupo de vendedores fraudulentos en función al monto de las ventas de cada vendedor, para determinar el interés de la empresa en supervisarlos.
 
 ---
 # Análisis de resultados
 
 ### Parte 1: Preparación y análisis de los datos
-Cuando hacemos el análisis detallado del dataset resultante luego de la curación y antes de ejecutar el paso 11. , vemos que no hay cambios apreciables en respecto a sus resultados equivalentes del tp2. Sin embargo, cuando comparamos los datasets pivoteados entre el tp2 y el tp3, hay una clara variación tanto en las medais como en las desviaciones estándares gracias al nuevo paso de curación realizado. Ahora los datos son muchísimo menos ruidosos y presentan rangos de variación más acotados. Algunos subrubros presentan una mayor variación entre el tp2 y tp3 que otros: 'Farmacia', 'Comb.', 'Vehiculos', 'Tabaco' y 'Comb. Reventa' presentan las variaciones más leves. 
+Cuando hacemos el análisis detallado del dataset resultante luego de la curación y antes de ejecutar el paso 11. , vemos que no hay cambios apreciables respecto a sus resultados equivalentes del tp2. Sin embargo, cuando comparamos los datasets pivoteados entre el tp2 y el tp3, hay una clara variación tanto en las medias como en las desviaciones estándares gracias al nuevo paso de curación realizado. Ahora los datos son muchísimo menos ruidosos y presentan rangos de variación más acotados. Algunos subrubros presentan una mayor variación entre el tp2 y tp3 que otros: 'Farmacia', 'Comb.', 'Vehiculos', 'Tabaco' y 'Comb. Reventa' presentan las variaciones más leves. 
 
-***Nota:*** Recordamos que la cantidad de subrubros con la que contamos es de 11: `Com. Varios`, `Comb.`. `Comb. Ley`, `Comb. Reventa`, `Farmacia`, `Gondola`, `Miscelaneo`, `Supermercados`, `Tabaco`, `Vehiculos` y `Venta Agrop.`.
+***Nota:*** Recordamos que la cantidad de subrubros con la que contamos es de 11: `Com. Varios`, `Comb.`, `Comb. Ley`, `Comb. Reventa`, `Farmacia`, `Gondola`, `Miscelaneo`, `Supermercados`, `Tabaco`, `Vehiculos` y `Venta Agrop.`.
 
 ### Parte 2: Análisis e imputación de NaNs
-Al identificar los datos faltantes en el dataset pivoteado, vemos que hay de todo: desde 0 datos faltantes hasta casi la totalidad de datos faltantes. Incluso se presentan vendedores modelo con datos faltantes. Notamos que en muchos casos se debe a que dichos vendedores participan en más de un subrubro.
+Al identificar los datos faltantes en el dataset pivoteado, vemos que hay de todo: desde 0 datos faltantes hasta casi la totalidad de datos faltantes. Incluso se presentan vendedores modelo con muchos datos faltantes. Notamos que en muchos casos se debe a que dichos vendedores participan en más de un subrubro.
 
 Debido a esta participación de varios vendedores en más de un subrubro, tanto modelos como no modelo, se decidió clasificar su participación de la siguiente manera:
 * Se asigna que el subrubro es **Primario** cuando
@@ -136,12 +140,54 @@ Observamos entonces que DBSCAN es más útil ya que no requiere de una intervenc
 | Vehiculos      |    221    |     1     |   0.45 %  |     0.30    |     23    |     18    |   8.14 %  |
 | Venta Agrop.   |    249    |     1     |   0.40 %  |     0.40    |     23    |     17    |   6.83 %  |
 
-Esto es sobre un total de 3135 vendedores únicos con 46 modelos (1.47 % del total), dando un total de 217 outliers (6.92 % del total). En la siguiente figura se observa el clustering para `Tabaco`. Teniendo en cuenta esto junto a los resultados de la tabla, concluimos que necesitamos más datos para poder establecer un modelo útil para este subrubro.
+Esto es sobre un total de 3135 vendedores únicos con 46 modelos (1.47 % del total), dando un total de 217 outliers (6.92 % del total). En la siguiente figura se observa el clustering para `Tabaco`. Teniendo en cuenta esto junto a los resultados de la tabla, concluimos que necesitamos más datos para poder establecer un modelo útil para este subrubro, con lo cual se lo excluye del análisis.
 
 ![codo4](figures/tp3_dbscan_Tabaco.png)
 
 ### Parte 4: Evaluación de resultados
-* sdasda
+Se recupera en un solo dataset la información de ventas/comisiones en pesos y la variación porcentual (interanual/intercuatrimestral).
+
+En primer lugar se evalúan las características distintivas de los dos clusters resultantes.
+En el siguiente ejemplo se grafican las medias y desviaciones estándar de las features de `Com. Varios` (en adelante centramos la evaluación en este Subrubro):
+
+![errorbar](figures/tp3_errorbar_comvarios.png)
+
+Se observa que la distribución del cluster 0 tiene menos variabilidad que el cluster -1 (que contenía a los outliers del DBSCAN).
+
+Analizando las medias, vemos claramente que tienden a ser más bajas para el cluster 0:
+
+![heatmap](figures/tp3_heatmap_comvarios.png)
+
+Por otra parte se observa que la presencia de datos faltantes en el dataset no necesariamente está relacionada a casos fraudulentos:
+
+![faltantes](figures/tp3_bars_faltantes.png)
+
+No existe un patrón claro. En algunos subrubros (Miscelaneo, Vehiculos y Venta Agrop.) hay más faltantes en el cluster -1. Mientras que en el resto de los subrubros, la mayoría de faltantes ocurren en el cluster 0.
+
+Luego procedemos a comparar los clusters resultantes contra las clases definidas por el grupo de expertos de la empresa (la variable Modelo):
+
+![clases](figures/tp3_clasesyclusters_comvarios.png)
+
+Observamos que los vendedores `Modelo` caen en el `Cluster 0`. Sin embargo, los `No Modelo` caen en ambos clusters. Lo cual tiene sentido, ya que el etiquetado de la variable Modelo no se hizo de manera exhaustiva sobre todos los vendedores, sino sobre una muestra.
+
+Posteriormente se evalúa la consistencia de la variable Modelo. Es decir, si se condice con lo arrojado por los datos:
+
+![modelos](figures/tp3_modelosvsclusters_comvarios.png)
+
+Se observa que los `Modelo` son más parecidos a los vendedores del `Cluster 0`, antes que al `Cluster -1`. Y en las variables de Comisión se observa más clara la diferencia.
+
+Por último se enfoca el análisis en los vendedores que pertenecen al `Cluster -1`, para determinar qué interés tienen esos vendedores para la empresa.
+
+En particular, vamos a segmentar al cluster en diferentes partes según los montos de Ventas que generan. Se definen 4 grupos en funcion de los cuartiles de la distribución general del subrubro. 
+
+![densidad](figures/tp3_densidad_comvarios.png)
+
+Y surgen 4 grupos de interés:
+
+![interes](figures/tp3_interes_comvarios.png)
+
+Entendiendo que el interés sobre un vendedor que vende poco y está fugando no es el mismo que sobre un vendedor que vende mucho.
+
 
 ---
 # Conclusiones: accionables
