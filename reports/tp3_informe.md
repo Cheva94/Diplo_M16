@@ -44,7 +44,7 @@
 * Al dataframe sobre el cual se realizó el clustering se le traen variables de interés como el promedio de ventas y comisiones y cantidad datos faltantes desde el dataset original. Y las columnas de variaciones porcentuales (para ventas/comisiones e intercuatrimestrales/interanuales).
 * Se exploran las características distintivas de los dos clusters resultantes.
 * Se evalúa la clusterización comparando contra las clases predefinidas de modelos.
-* Se evalúa la consistencia en el armado de la variable modelo por parte del equipo de expertos de la empresa, para observar si coinciden con los datos.
+* Se evalúa la consistencia en el armado de la variable modelo por parte del equipo de expertos de la empresa, para observar si coincide con los datos.
 * Se segmenta el grupo de vendedores fraudulentos en función al monto de las ventas de cada vendedor, para determinar el interés de la empresa en supervisarlos.
 
 ---
@@ -153,11 +153,11 @@ En el siguiente ejemplo se grafican las medias y desviaciones estándar de las v
 
 ![errorbar](figures/tp3_errorbar_comvarios.png)
 
-Se observa que la distribución del cluster 0 tiene menos variabilidad que el cluster -1. Analizando ahora sólo las medias, vemos claramente que tienden a ser más bajas para el cluster 0. Dicho de otro modo, aquellos etiquetados como -1 tienen en promedio variaciones porcentuales más eleveadas, lo cual tiene sentido si lo pensamos en términos de fraude: la variación porcentual es mayor al no haber declarado un mes y luego sí o viceversa.
+Se observa que la distribución del cluster 0 tiene menos variabilidad que el cluster -1. Analizando ahora sólo las medias, vemos claramente que tienden a ser más bajas para el cluster 0. Dicho de otro modo, aquellos etiquetados como -1 tienen en promedio variaciones porcentuales más elevadas, lo cual tiene sentido si lo pensamos en términos de fraude: la variación porcentual es mayor al no haber declarado un mes y luego sí o viceversa.
 
 ![heatmap](figures/tp3_heatmap_comvarios.png)
 
-Por otra parte se observa que la presencia de datos faltantes en el dataset no necesariamente está relacionada a casos fraudulentos:
+Por otra parte, se observa que la presencia de datos faltantes en el dataset no necesariamente está relacionada a casos fraudulentos:
 
 ![faltantes](figures/tp3_bars_faltantes.png)
 
@@ -200,7 +200,15 @@ En total para todos los subrubros se tiene:
 Luego de un exahustivo análisis de los datos, incluyendo su curación y tratramiento, concluimos lo siguiente:
 * Se logró segmentar a los vendedores en función de su comportamiento dentro de la plataforma de compra-venta online, logrando así detectar a aquellos que tienen un comportamiento potencialmente fraudulento.
 * Esta segmentación fue efectiva en 9 subrubros: `Com. Varios`, `Comb.`, `Comb. Ley`, `Farmacia`, `Gondola`, `Miscelaneo`, `Supermercados`, `Vehiculos` y `Venta Agrop.`.
+* El proceso quedó automatizado, de manera tal que funcionará si se ingresan nuevos datos.
 * Existe vendedores que han sido clasificados como fraudes en un subrubro, pero no así en los otros subrubros en los que participa.
-* Las mayores diferencias entre aquellso etiquetados como fraudes y aquellos que no se observa en las comisiones, repercutiendo directamente en las ganancias de la empresa.
+* Las mayores diferencias entre aquellos etiquetados como fraudes y aquellos que no lo son se observa en las comisiones, repercutiendo directamente en las ganancias de la empresa.
+* Robustez: la identificación de casos fraudulentos es consistente con el análisis de casos testigos aportado por expertos de la empresa.
 
-Finalmente, se hizo un ranking de impacto para cada uno de los subrubros con aquellos vendedores que fueron etiquetados como potenciales fraudes, permitiendo disernir entre aquellos que serían menos problemáticos para le empresa de aquellos que serían más problemáticos. Se entrega este ranking junto a los respectivos `ID` de los vendedores (Diplo_M16/data/processed/) para que la empresa pueda tomar decisiones acorde a esta información.
+Finalmente, se hizo un ranking de impacto para cada uno de los subrubros con aquellos vendedores que fueron etiquetados como potenciales fraudes, permitiendo discernir entre aquellos que serían de menor interés para le empresa de aquellos que serían de mayor interés (en función del volumen de ventas asociado a ese vendedor). Se entrega este ranking junto a los respectivos `ID` de los vendedores (Diplo_M16/data/processed/) para que la empresa pueda tomar decisiones acorde a esta información.
+
+**Posibles mejoras:**
+
+Se podría generalizar el procedimiento a más subrubros si se dispusiese de:
+* Más observaciones dentro de los subrubros en los que no se pudo modelar por haber pocos casos.
+* La presencia de al menos una etiqueta de vendedor "Modelo" por subrubro.
